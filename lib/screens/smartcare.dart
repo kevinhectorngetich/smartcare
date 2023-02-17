@@ -16,9 +16,11 @@ class _SmartCareScreenState extends State<SmartCareScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            Row(children: [
-              Text('Smart Care'),
-            ],),
+            Row(
+              children: [
+                const Text('Smart Care'),
+              ],
+            ),
             Container(
               height: 30,
               color: primaryColorLightpurple,
