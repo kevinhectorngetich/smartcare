@@ -17,8 +17,8 @@ class _SmartCareScreenState extends State<SmartCareScreen> {
         child: Column(
           children: [
             Row(
-              children: [
-                const Text('Smart Care'),
+              children: const [
+                Text('Smart Care'),
               ],
             ),
             Container(
