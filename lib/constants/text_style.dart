@@ -16,7 +16,7 @@ const kTitleStyle = TextStyle(
 );
 const kparagrapghStyle = TextStyle(
   fontFamily: 'Poppins',
-  fontSize: 11.0,
+  fontSize: 13.0,
   fontWeight: FontWeight.w500,
   color: Colors.white,
 );

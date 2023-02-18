@@ -16,3 +16,15 @@ final appTheme = ThemeData(
     ),
   ),
 );
+
+ButtonStyle kviewStats() {
+  return ButtonStyle(
+    // foregroundColor: MaterialStateProperty.all(Colors.white),
+    shape: MaterialStateProperty.all(
+        RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0))),
+    backgroundColor: MaterialStateProperty.all(Colors.white),
+    padding: MaterialStateProperty.all(
+      const EdgeInsets.fromLTRB(30.0, 10.0, 30.0, 10.0),
+    ),
+  );
+}

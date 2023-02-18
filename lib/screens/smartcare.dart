@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smartcare/common/theme.dart';
 import 'package:smartcare/constants/constants.dart';
 import 'package:smartcare/constants/text_style.dart';
 
@@ -45,13 +46,14 @@ class _SmartCareScreenState extends State<SmartCareScreen> {
                 child: Padding(
                   padding: const EdgeInsets.all(20.0),
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const Text(
                         'Welcome',
                         style: kTitleStyle,
                       ),
                       const SizedBox(
-                        height: 10.0,
+                        height: 15.0,
                       ),
                       const Text(
                         'Transform your screen time habits with Smart Care, the innovative app that monitors usage and reminds you to take breaks.',
@@ -61,9 +63,11 @@ class _SmartCareScreenState extends State<SmartCareScreen> {
                         height: 20.0,
                       ),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           TextButton(
                             onPressed: () {},
+                            style: kviewStats(),
                             child: const Text(
                               'view stats',
                               style: kbuttonTextStyle,
