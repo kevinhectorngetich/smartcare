@@ -4,8 +4,8 @@ import 'package:smartcare/constants/constants.dart';
 final appTheme = ThemeData(
   useMaterial3: true,
   colorScheme: ColorScheme.fromSwatch().copyWith(
-    primary: primaryColorLightpurple,
-    background: backgroundPurple,
+    primary: myprimaryColorLightpurple,
+    background: mybackgroundPurple,
   ),
   textTheme: const TextTheme(
     displayLarge: TextStyle(
