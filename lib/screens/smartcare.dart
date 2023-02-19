@@ -29,8 +29,8 @@ class _SmartCareScreenState extends State<SmartCareScreen> {
                   ),
                 ],
               ),
-              const SizedBox(
-                height: 20.0,
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.05,
               ),
               Container(
                 decoration: const BoxDecoration(
@@ -78,6 +78,103 @@ class _SmartCareScreenState extends State<SmartCareScreen> {
                     ],
                   ),
                 ),
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.05,
+              ),
+              Container(
+                decoration: const BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                  color: myContainerLightpurple,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const [
+                      Text(
+                        'Time saving tips:',
+                        style: kTimeSavingTipsTextStyle,
+                      ),
+                      SizedBox(
+                        height: 10.0,
+                      ),
+                      Text(
+                        '” Transform your screen time habits with Smart Care, the innovative app that monitors usage and reminds you to take breaks.”',
+                        style: ktimeSavingTipsBody,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.05,
+              ),
+              Row(
+                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    width: 140,
+                    height: 140,
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                      image: DecorationImage(
+                        image: AssetImage('assets/images/home-card.png'),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        children: const [
+                          Text(
+                            '0',
+                            style: khomeCardDigit,
+                          ),
+                          SizedBox(
+                            height: 10.0,
+                          ),
+                          Text(
+                            '''Number of times phone was opened''',
+                            style: kcardTextStyle,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.05,
+                  ),
+                  Container(
+                    width: 140,
+                    height: 140,
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                      image: DecorationImage(
+                        image: AssetImage('assets/images/home-card2.png'),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        children: const [
+                          Text(
+                            '0',
+                            style: khomeCardDigit,
+                          ),
+                          SizedBox(
+                            height: 10.0,
+                          ),
+                          Text(
+                            'Number of hours spent on social media',
+                            style: kcardTextStyle,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

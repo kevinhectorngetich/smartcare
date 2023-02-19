@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smartcare/constants/constants.dart';
 import 'package:smartcare/screens/charts.dart';
 import 'package:smartcare/screens/pomodoro.dart';
 import 'package:smartcare/screens/smartcare.dart';
@@ -25,7 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: screens[currentIndex],
       bottomNavigationBar: NavigationBarTheme(
         data: const NavigationBarThemeData(
-          indicatorColor: Colors.amber,
+          indicatorColor: mybackgroundPurple,
           // indicatorColor: ,
         ),
         child: NavigationBar(
@@ -42,15 +43,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 Icons.menu,
                 color: Colors.white,
               ),
-              label: 'Dashboard',
+              label: 'Home',
             ),
             NavigationDestination(
               icon: Icon(Icons.local_library_rounded, color: Colors.white),
-              label: 'Library',
+              label: 'Chart',
             ),
             NavigationDestination(
               icon: Icon(Icons.person, color: Colors.white),
-              label: 'Profile',
+              label: 'Pomodoro',
             ),
           ],
         ),
