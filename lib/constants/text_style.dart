@@ -7,6 +7,12 @@ const kpageTitleStyle = TextStyle(
   fontWeight: FontWeight.bold,
   color: Colors.white,
 );
+const kpageBodyStyle = TextStyle(
+  fontFamily: 'Poppins',
+  fontSize: 13.0,
+  fontWeight: FontWeight.w400,
+  color: Colors.white,
+);
 
 const kTitleStyle = TextStyle(
   fontFamily: 'Poppins',

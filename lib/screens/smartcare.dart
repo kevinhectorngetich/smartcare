@@ -180,8 +180,6 @@ class _SmartCareScreenState extends State<SmartCareScreen> {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-          onPressed: () {}, child: const Icon(Icons.ac_unit)),
     );
   }
 }

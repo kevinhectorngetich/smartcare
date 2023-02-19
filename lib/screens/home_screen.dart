@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smartcare/constants/constants.dart';
+import 'package:smartcare/constants/text_style.dart';
 import 'package:smartcare/screens/charts.dart';
 import 'package:smartcare/screens/pomodoro.dart';
 import 'package:smartcare/screens/smartcare.dart';
@@ -25,8 +26,9 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       body: screens[currentIndex],
       bottomNavigationBar: NavigationBarTheme(
-        data: const NavigationBarThemeData(
+        data: NavigationBarThemeData(
           indicatorColor: mybackgroundPurple,
+          labelTextStyle: MaterialStateProperty.all(kparagrapghStyle),
           // indicatorColor: ,
         ),
         child: NavigationBar(
@@ -36,7 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
               currentIndex = index;
             });
           },
-          backgroundColor: mybackgroundPurple,
+          backgroundColor: mybottomNavigationPurple,
           destinations: const [
             NavigationDestination(
               selectedIcon: Icon(Icons.home_rounded),
