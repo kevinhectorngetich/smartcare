@@ -16,167 +16,167 @@ class _SmartCareScreenState extends State<SmartCareScreen> {
     return Scaffold(
       backgroundColor: mybackgroundPurple,
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.only(left: 20.0, right: 20.0),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  Text(
-                    'Smart Care',
-                    style: kpageTitleStyle,
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.05,
-              ),
-              Container(
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                  image: DecorationImage(
-                    image: AssetImage(
-                      'assets/images/hero-image.png',
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Text(
+                      'Smart Care',
+                      style: kpageTitleStyle,
                     ),
-                    fit: BoxFit.fill,
-                  ),
+                  ],
                 ),
-                // height: 180,
-                child: Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'Welcome',
-                        style: kTitleStyle,
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.05,
+                ),
+                Container(
+                  decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                    image: DecorationImage(
+                      image: AssetImage(
+                        'assets/images/hero-image.png',
                       ),
-                      const SizedBox(
-                        height: 15.0,
-                      ),
-                      const Text(
-                        'Transform your screen time habits with Smart Care, the innovative app that monitors usage and reminds you to take breaks.',
-                        style: kparagrapghStyle,
-                      ),
-                      const SizedBox(
-                        height: 20.0,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          TextButton(
-                            onPressed: () {},
-                            style: kviewStats(),
-                            child: const Text(
-                              'view stats',
-                              style: kbuttonTextStyle,
+                      fit: BoxFit.fill,
+                    ),
+                  ),
+                  // height: 180,
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Welcome',
+                          style: kTitleStyle,
+                        ),
+                        const SizedBox(
+                          height: 15.0,
+                        ),
+                        const Text(
+                          'Transform your screen time habits with Smart Care, the innovative app that monitors usage and reminds you to take breaks.',
+                          style: kparagrapghStyle,
+                        ),
+                        const SizedBox(
+                          height: 20.0,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            TextButton(
+                              onPressed: () {},
+                              style: kviewStats(),
+                              child: const Text(
+                                'view stats',
+                                style: kbuttonTextStyle,
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ],
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.05,
-              ),
-              Container(
-                decoration: const BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                  color: myContainerLightpurple,
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.05,
                 ),
-                child: Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
-                      Text(
-                        'Time saving tips:',
-                        style: kTimeSavingTipsTextStyle,
-                      ),
-                      SizedBox(
-                        height: 10.0,
-                      ),
-                      Text(
-                        '” Transform your screen time habits with Smart Care, the innovative app that monitors usage and reminds you to take breaks.”',
-                        style: ktimeSavingTipsBody,
-                      ),
-                    ],
+                Container(
+                  decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                    color: myContainerLightpurple,
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: const [
+                        Text(
+                          'Time saving tips:',
+                          style: kTimeSavingTipsTextStyle,
+                        ),
+                        SizedBox(
+                          height: 10.0,
+                        ),
+                        Text(
+                          '” Transform your screen time habits with Smart Care, the innovative app that monitors usage and reminds you to take breaks.”',
+                          style: ktimeSavingTipsBody,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              SizedBox(
-                height: MediaQuery.of(context).size.height * 0.05,
-              ),
-              Row(
-                // mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    width: 140,
-                    height: 140,
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                      image: DecorationImage(
-                        image: AssetImage('assets/images/home-card.png'),
-                        fit: BoxFit.cover,
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.05,
+                ),
+                Row(
+                  // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      width: 140,
+                      decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                        image: DecorationImage(
+                          image: AssetImage('assets/images/home-card.png'),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          children: const [
+                            Text(
+                              '0',
+                              style: khomeCardDigit,
+                            ),
+                            SizedBox(
+                              height: 10.0,
+                            ),
+                            Text(
+                              '''Number of times phone was opened''',
+                              style: kcardTextStyle,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        children: const [
-                          Text(
-                            '0',
-                            style: khomeCardDigit,
-                          ),
-                          SizedBox(
-                            height: 10.0,
-                          ),
-                          Text(
-                            '''Number of times phone was opened''',
-                            style: kcardTextStyle,
-                          ),
-                        ],
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.05,
+                    ),
+                    Container(
+                      width: 140,
+                      decoration: const BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                        image: DecorationImage(
+                          image: AssetImage('assets/images/home-card2.png'),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          children: const [
+                            Text(
+                              '0',
+                              style: khomeCardDigit,
+                            ),
+                            SizedBox(
+                              height: 10.0,
+                            ),
+                            Text(
+                              'Number of hours spent on social media',
+                              style: kcardTextStyle,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.05,
-                  ),
-                  Container(
-                    width: 140,
-                    height: 140,
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                      image: DecorationImage(
-                        image: AssetImage('assets/images/home-card2.png'),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        children: const [
-                          Text(
-                            '0',
-                            style: khomeCardDigit,
-                          ),
-                          SizedBox(
-                            height: 10.0,
-                          ),
-                          Text(
-                            'Number of hours spent on social media',
-                            style: kcardTextStyle,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

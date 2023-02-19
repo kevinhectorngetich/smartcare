@@ -36,21 +36,24 @@ class _HomeScreenState extends State<HomeScreen> {
               currentIndex = index;
             });
           },
-          backgroundColor: Colors.black,
+          backgroundColor: mybackgroundPurple,
           destinations: const [
             NavigationDestination(
+              selectedIcon: Icon(Icons.home_rounded),
               icon: Icon(
-                Icons.menu,
-                color: Colors.white,
+                Icons.home_rounded,
+                color: Colors.white38,
               ),
               label: 'Home',
             ),
             NavigationDestination(
-              icon: Icon(Icons.local_library_rounded, color: Colors.white),
+              selectedIcon: Icon(Icons.bar_chart_rounded),
+              icon: Icon(Icons.bar_chart_rounded, color: Colors.white38),
               label: 'Chart',
             ),
             NavigationDestination(
-              icon: Icon(Icons.person, color: Colors.white),
+              selectedIcon: Icon(Icons.more_time_rounded),
+              icon: Icon(Icons.more_time_rounded, color: Colors.white38),
               label: 'Pomodoro',
             ),
           ],
