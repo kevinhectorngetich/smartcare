@@ -18,7 +18,8 @@ class _HomeScreenState extends State<HomeScreen> {
   final screens = [
     const SmartCareScreen(),
     const ChartScreen(),
-    const PomodoroScreen(),
+    // const PomodoroScreen(),
+    HomePage()
   ];
 
   @override
