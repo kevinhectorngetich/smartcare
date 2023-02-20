@@ -16,6 +16,7 @@ class HomePage extends StatelessWidget {
   HomePage({Key? key}) : super(key: key);
 
   // Generate dummy data to feed the chart
+  // ignore: unused_field
   final List<DataItem> _myData = List.generate(
       30,
       (index) => DataItem(

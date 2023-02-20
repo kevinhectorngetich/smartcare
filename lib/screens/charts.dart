@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:smartcare/constants/constants.dart';
 import 'package:smartcare/constants/text_style.dart';
 import 'package:smartcare/models/bar_data.dart';
-import 'package:smartcare/widgets/bar_titles.dart';
 
 class ChartScreen extends StatefulWidget {
   const ChartScreen({super.key});
@@ -52,10 +51,8 @@ class _ChartScreenState extends State<ChartScreen> {
                         // groupsSpace: 2,
                         barTouchData: BarTouchData(enabled: true),
                         titlesData: FlTitlesData(
-                          bottomTitles: AxisTitles(
-                            sideTitles: BarTitles.getBottomTitles(),
-                          ),
-                        ),
+                            // bottomTitles: , TODO:
+                            ),
                         // backgroundColor:
                         barGroups: BarData.barData
                             .map(
