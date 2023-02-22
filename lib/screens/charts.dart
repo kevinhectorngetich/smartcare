@@ -49,8 +49,10 @@ class _ChartScreenState extends State<ChartScreen> {
       );
   SideTitles get _sideTitles => SideTitles(
         showTitles: true,
+        interval: 6,
+        reservedSize: 32.0,
         getTitlesWidget: (value, meta) => Text(
-          '${value.toInt()}' ' hrs',
+          value == 0 ? '0' : '${value.toInt()}' ' hrs',
           style: const TextStyle(
               fontFamily: 'Poppins', color: Colors.white, fontSize: 10.0),
         ),
@@ -88,31 +90,62 @@ class _ChartScreenState extends State<ChartScreen> {
                     borderRadius: BorderRadius.all(Radius.circular(20.0)),
                     color: myContainerLightpurple,
                   ),
-                  child: BarChart(
-                    BarChartData(
-                        maxY: 24,
-                        // groupsSpace: 2,
-                        barTouchData: BarTouchData(enabled: true),
-                        titlesData: FlTitlesData(
-                            topTitles: AxisTitles(
-                                sideTitles: SideTitles(showTitles: false)),
-                            rightTitles: AxisTitles(
-                                sideTitles: SideTitles(showTitles: false)),
-                            // bottomTitles:
-                            bottomTitles: AxisTitles(sideTitles: _bottomTitles),
-                            leftTitles: AxisTitles(sideTitles: _sideTitles)),
+                  child: Padding(
+                    padding: const EdgeInsets.all(15.0),
+                    child: BarChart(
+                      BarChartData(
+                          borderData: FlBorderData(
+                            show: true,
 
-                        // backgroundColor:
-                        barGroups: BarData.barData
-                            .map(
-                              (data) => BarChartGroupData(x: data.id, barRods: [
-                                BarChartRodData(
+                            // border: Border.all(
+                            //   style: BorderStyle.solid,
+                            //   color: Colors.white30,
+                            // ),
+                          ),
+                          maxY: 24,
+                          groupsSpace: 12,
+                          gridData: FlGridData(
+                            show: false,
+                            checkToShowHorizontalLine: (value) =>
+                                value % 3 == 0,
+                            getDrawingHorizontalLine: (value) {
+                              return FlLine(
+                                color: Colors.white,
+                                strokeWidth: 2.8,
+                              );
+                            },
+                          ),
+                          barTouchData: BarTouchData(enabled: true),
+                          titlesData: FlTitlesData(
+                              topTitles: AxisTitles(
+                                  sideTitles: SideTitles(showTitles: false)),
+                              rightTitles: AxisTitles(
+                                  sideTitles: SideTitles(showTitles: false)),
+                              // bottomTitles:
+                              bottomTitles:
+                                  AxisTitles(sideTitles: _bottomTitles),
+                              leftTitles: AxisTitles(sideTitles: _sideTitles)),
+
+                          // backgroundColor:
+                          barGroups: BarData.barData
+                              .map(
+                                (data) =>
+                                    BarChartGroupData(x: data.id, barRods: [
+                                  BarChartRodData(
                                     toY: data.hoursUsed,
+                                    color: mybarRodOrange,
                                     borderRadius: const BorderRadius.all(
-                                        Radius.circular(20.0))),
-                              ]),
-                            )
-                            .toList()),
+                                        Radius.circular(20.0)),
+                                    backDrawRodData: BackgroundBarChartRodData(
+                                        fromY: 0,
+                                        toY: 24,
+                                        color: Colors.white30,
+                                        show: true),
+                                  ),
+                                ]),
+                              )
+                              .toList()),
+                    ),
                   ),
                 ),
                 SizedBox(
