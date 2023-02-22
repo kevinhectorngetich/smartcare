@@ -12,6 +12,49 @@ class ChartScreen extends StatefulWidget {
 }
 
 class _ChartScreenState extends State<ChartScreen> {
+  SideTitles get _bottomTitles => SideTitles(
+        showTitles: true,
+        getTitlesWidget: (value, meta) {
+          String text = '';
+          switch (value.toInt()) {
+            case 0:
+              text = 'Sun';
+              break;
+            case 1:
+              text = 'Mon';
+              break;
+            case 2:
+              text = 'Tue';
+              break;
+            case 3:
+              text = 'Wed';
+              break;
+            case 4:
+              text = 'Thur';
+              break;
+            case 5:
+              text = 'Fri';
+              break;
+            case 6:
+              text = 'Sat';
+              break;
+          }
+
+          return Text(
+            text,
+            style: const TextStyle(
+                fontFamily: 'Poppins', color: Colors.white, fontSize: 10.0),
+          );
+        },
+      );
+  SideTitles get _sideTitles => SideTitles(
+        showTitles: true,
+        getTitlesWidget: (value, meta) => Text(
+          '${value.toInt()}' ' hrs',
+          style: const TextStyle(
+              fontFamily: 'Poppins', color: Colors.white, fontSize: 10.0),
+        ),
+      );
   @override
   Widget build(BuildContext context) {
     double paddingHeight = MediaQuery.of(context).size.height * 0.05;
@@ -51,8 +94,14 @@ class _ChartScreenState extends State<ChartScreen> {
                         // groupsSpace: 2,
                         barTouchData: BarTouchData(enabled: true),
                         titlesData: FlTitlesData(
-                            // bottomTitles: , TODO:
-                            ),
+                            topTitles: AxisTitles(
+                                sideTitles: SideTitles(showTitles: false)),
+                            rightTitles: AxisTitles(
+                                sideTitles: SideTitles(showTitles: false)),
+                            // bottomTitles:
+                            bottomTitles: AxisTitles(sideTitles: _bottomTitles),
+                            leftTitles: AxisTitles(sideTitles: _sideTitles)),
+
                         // backgroundColor:
                         barGroups: BarData.barData
                             .map(

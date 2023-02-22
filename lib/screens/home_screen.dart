@@ -19,7 +19,8 @@ class _HomeScreenState extends State<HomeScreen> {
     const SmartCareScreen(),
     const ChartScreen(),
     // const PomodoroScreen(),
-    HomePage()
+    // HomePage()
+    BarChartWidget(),
   ];
 
   @override
