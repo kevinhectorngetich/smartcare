@@ -6,6 +6,8 @@ A new Flutter project.
 
 # This application has three main objectives:
 - monitor screen time
+- give notifications when certain screen time has been exceeded
+- also a pomodoro technique to assist learners
 
 A few resources to get you started if this is your first Flutter project:
 
