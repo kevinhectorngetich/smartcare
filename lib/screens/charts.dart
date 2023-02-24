@@ -11,6 +11,13 @@ class ChartScreen extends StatefulWidget {
   State<ChartScreen> createState() => _ChartScreenState();
 }
 
+Map<String, String> appImages = {
+  'instagaram': 'assets/images/instagram.png',
+  'whatsapp': 'assets/images/whatsapp.png',
+  'facebook': 'assets/images/instagram.png',
+  'meta': 'assets/images/whatsapp.png',
+};
+
 class _ChartScreenState extends State<ChartScreen> {
   SideTitles get _bottomTitles => SideTitles(
         showTitles: true,
@@ -95,7 +102,7 @@ class _ChartScreenState extends State<ChartScreen> {
                     child: BarChart(
                       BarChartData(
                           borderData: FlBorderData(
-                            show: true,
+                            show: false,
 
                             // border: Border.all(
                             //   style: BorderStyle.solid,
@@ -152,18 +159,60 @@ class _ChartScreenState extends State<ChartScreen> {
                   height: paddingHeight,
                 ),
                 Container(
-                  height: 200,
+                  height: MediaQuery.of(context).size.height * 0.35,
                   decoration: const BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(20.0)),
                     color: myContainerLightpurple,
                   ),
                   child: Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(20.0),
                     child: ListView.builder(
-                        itemCount: 3,
+                        itemCount: appImages.length,
                         itemBuilder: (context, index) {
-                          return ListTile(
-                            leading: Text('$index'),
+                          final key = appImages.keys.elementAt(index);
+                          final value = appImages.values.elementAt(index);
+                          // return ListTile(
+                          //   leading: ,
+                          // );
+                          return Padding(
+                            padding: const EdgeInsets.only(
+                                top: 8.0, bottom: 8.0, left: 30.0, right: 30.0),
+                            child: Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    Image.asset(
+                                      value,
+                                      height: 50.0,
+                                      width: 50.0,
+                                    ),
+                                    const SizedBox(
+                                      width: 15.0,
+                                    ),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          key,
+                                          style: klistviewTitle,
+                                        ),
+                                        const Text(
+                                          'spent time: 4hrs 22 min',
+                                          style: klistviewSubTitle,
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 5.0,
+                                ),
+                                const Divider(
+                                  color: Colors.white24,
+                                ),
+                              ],
+                            ),
                           );
                         }),
                   ),

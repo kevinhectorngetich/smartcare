@@ -56,3 +56,29 @@ const khomeCardDigit = TextStyle(
   color: Colors.white,
   fontWeight: FontWeight.bold,
 );
+//! POMODORO
+const ktimerTextStyles = TextStyle(
+  fontFamily: 'Poppins',
+  fontSize: 17.0,
+  color: mypink,
+  fontWeight: FontWeight.bold,
+);
+const kstartButtonTextStyles = TextStyle(
+  fontFamily: 'Poppins',
+  fontSize: 13.0,
+  color: Colors.white,
+  fontWeight: FontWeight.bold,
+);
+//! CHARTS LIST
+const klistviewTitle = TextStyle(
+  fontFamily: 'Poppins',
+  fontSize: 16.0,
+  color: Colors.white,
+  fontWeight: FontWeight.w600,
+);
+const klistviewSubTitle = TextStyle(
+  fontFamily: 'Poppins',
+  fontSize: 12.0,
+  color: Colors.white,
+  fontWeight: FontWeight.w400,
+);
