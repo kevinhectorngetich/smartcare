@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rive/rive.dart';
 import 'package:smartcare/common/theme.dart';
 import 'package:smartcare/constants/constants.dart';
 import 'package:smartcare/constants/text_style.dart';
@@ -37,10 +38,10 @@ class _PomodoroScreenState extends State<PomodoroScreen> {
               SizedBox(
                 height: paddingHeight,
               ),
-              Container(
-                child: Image.asset(
-                  'assets/images/solar.png',
-                  height: 180.0,
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.32375,
+                child: const RiveAnimation.asset(
+                  'assets/rive/solar.riv',
                 ),
               ),
               SizedBox(
