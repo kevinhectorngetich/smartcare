@@ -1,4 +1,7 @@
+import 'dart:typed_data';
+
 import 'package:app_usage/app_usage.dart';
+import 'package:device_apps/device_apps.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:smartcare/constants/constants.dart';
@@ -110,6 +113,10 @@ class _ChartScreenState extends State<ChartScreen> {
       print(exception);
       return [];
     }
+  }
+
+  void getAppIconMethod(String packageName) async {
+    Application? app = await DeviceApps.getApp(packageName);
   }
 
   @override
@@ -226,6 +233,10 @@ class _ChartScreenState extends State<ChartScreen> {
                                 itemCount: infoList.length,
                                 itemBuilder: (context, index) {
                                   AppUsageInfo info = infoList[index];
+                                  // getAppIconMethod();
+                                  //TODO: use this icon
+                                  // Uint8List? icon = getAppIconMethod(info.packageName);
+
                                   // final key = appImages.keys.elementAt(index);
                                   // final value =appImages.values.elementAt(index);
                                   // return ListTile(
@@ -277,7 +288,7 @@ class _ChartScreenState extends State<ChartScreen> {
                                   );
                                 });
                           } else {
-                            return CircularProgressIndicator();
+                            return Center(child: CircularProgressIndicator());
                           }
                         }),
                   ),
