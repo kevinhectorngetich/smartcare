@@ -1,3 +1,4 @@
+import 'package:app_usage/app_usage.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:smartcare/constants/constants.dart';
@@ -64,6 +65,53 @@ class _ChartScreenState extends State<ChartScreen> {
               fontFamily: 'Poppins', color: Colors.white, fontSize: 10.0),
         ),
       );
+  // AppUsage().getAppUsage(startDate, endDate);
+  // Future<List<AppUsageInfo>>? _infos;
+  // @override
+  // void initState() {
+  //   getUsageStats();
+  //   super.initState();
+  // }
+
+  // void getUsageStats() async {
+  //   try {
+  //     DateTime endDate = DateTime.now();
+  //     DateTime startDate = endDate.subtract(Duration(hours: 1));
+  //     List<AppUsageInfo> infoList =
+  //         await AppUsage().getAppUsage(startDate, endDate);
+  //     // setState(() => _infos = infoList);
+  //     print(infoList);
+  //     print('above------  above');
+
+  //     for (var info in infoList) {
+  //       print(info.toString());
+  //       // _infos.add()
+  //     }
+  //   } on AppUsageException catch (exception) {
+  //     print(exception);
+  //   }
+  // }
+  Future<List<AppUsageInfo>>? _infos;
+
+  @override
+  void initState() {
+    super.initState();
+    _infos = getUsageStats();
+  }
+
+  Future<List<AppUsageInfo>> getUsageStats() async {
+    try {
+      DateTime endDate = DateTime.now();
+      DateTime startDate = endDate.subtract(Duration(hours: 24));
+      List<AppUsageInfo> infoList =
+          await AppUsage().getAppUsage(startDate, endDate);
+      return infoList;
+    } on AppUsageException catch (exception) {
+      print(exception);
+      return [];
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     double paddingHeight = MediaQuery.of(context).size.height * 0.05;
@@ -166,54 +214,71 @@ class _ChartScreenState extends State<ChartScreen> {
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(20.0),
-                    child: ListView.builder(
-                        itemCount: appImages.length,
-                        itemBuilder: (context, index) {
-                          final key = appImages.keys.elementAt(index);
-                          final value = appImages.values.elementAt(index);
-                          // return ListTile(
-                          //   leading: ,
-                          // );
-                          return Padding(
-                            padding: const EdgeInsets.only(
-                                top: 8.0, bottom: 8.0, left: 30.0, right: 30.0),
-                            child: Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    Image.asset(
-                                      value,
-                                      height: 50.0,
-                                      width: 50.0,
-                                    ),
-                                    const SizedBox(
-                                      width: 15.0,
-                                    ),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                    child: FutureBuilder(
+                        future: _infos,
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            // AppUsageInfo appUsageInfo = AppUsageInfo();
+                            List<AppUsageInfo> infoList = snapshot.data!;
+                            return ListView.builder(
+
+                                // itemCount: appImages.length,
+                                itemCount: infoList.length,
+                                itemBuilder: (context, index) {
+                                  AppUsageInfo info = infoList[index];
+                                  // final key = appImages.keys.elementAt(index);
+                                  // final value =appImages.values.elementAt(index);
+                                  // return ListTile(
+                                  //   leading: ,
+                                  // );
+                                  return Padding(
+                                    padding: const EdgeInsets.only(
+                                        top: 8.0,
+                                        bottom: 8.0,
+                                        left: 30.0,
+                                        right: 30.0),
+                                    child: Column(
                                       children: [
-                                        Text(
-                                          key,
-                                          style: klistviewTitle,
+                                        Row(
+                                          children: [
+                                            // Image.asset(
+                                            //   info.,
+                                            //   height: 50.0,
+                                            //   width: 50.0,
+                                            // ),
+                                            const SizedBox(
+                                              width: 15.0,
+                                            ),
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  info.appName,
+                                                  style: klistviewTitle,
+                                                ),
+                                                Text(
+                                                  '${info.usage.inHours}'
+                                                  ' hrs',
+                                                  style: klistviewSubTitle,
+                                                ),
+                                              ],
+                                            )
+                                          ],
                                         ),
-                                        const Text(
-                                          'spent time: 4hrs 22 min',
-                                          style: klistviewSubTitle,
+                                        const SizedBox(
+                                          height: 5.0,
+                                        ),
+                                        const Divider(
+                                          color: Colors.white24,
                                         ),
                                       ],
-                                    )
-                                  ],
-                                ),
-                                const SizedBox(
-                                  height: 5.0,
-                                ),
-                                const Divider(
-                                  color: Colors.white24,
-                                ),
-                              ],
-                            ),
-                          );
+                                    ),
+                                  );
+                                });
+                          } else {
+                            return CircularProgressIndicator();
+                          }
                         }),
                   ),
                 ),

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:app_usage/app_usage.dart';
 import 'package:flutter/material.dart';
 import 'package:rive/rive.dart';
 import 'package:smartcare/common/theme.dart';
@@ -145,16 +146,6 @@ class _PomodoroScreenState extends State<PomodoroScreen> {
               const SizedBox(
                 height: 30.0,
               ),
-              // TextButton(
-              //   style: kstartTimerButton(),
-              //   onPressed: () {
-              //     setState(() {});
-              //   },
-              //   child: const Text(
-              //     'START',
-              //     style: kstartButtonTextStyles,
-              //   ),
-              // ),
               buildButton(),
             ],
           ),

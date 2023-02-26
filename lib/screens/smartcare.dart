@@ -1,3 +1,4 @@
+import 'package:app_usage/app_usage.dart';
 import 'package:flutter/material.dart';
 import 'package:smartcare/common/theme.dart';
 import 'package:smartcare/constants/constants.dart';
@@ -11,6 +12,25 @@ class SmartCareScreen extends StatefulWidget {
 }
 
 class _SmartCareScreenState extends State<SmartCareScreen> {
+  void getUsageStats() async {
+    try {
+      DateTime endDate = DateTime.now();
+      DateTime startDate = endDate.subtract(Duration(hours: 1));
+      List<AppUsageInfo> infoList =
+          await AppUsage().getAppUsage(startDate, endDate);
+      List<AppUsageInfo> _infos;
+      setState(() => _infos = infoList);
+      print(infoList);
+      print('above------  above');
+
+      for (var info in infoList) {
+        print(info.toString());
+      }
+    } on AppUsageException catch (exception) {
+      print(exception);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,7 +87,9 @@ class _SmartCareScreenState extends State<SmartCareScreen> {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             TextButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                getUsageStats();
+                              },
                               style: kviewStats(),
                               child: const Text(
                                 'view stats',
