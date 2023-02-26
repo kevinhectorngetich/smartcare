@@ -33,7 +33,7 @@ class _PomodoroScreenState extends State<PomodoroScreen> {
 
   void reset() {
     setState(() {
-      maxMinutes = const Duration();
+      maxMinutes = const Duration(minutes: 25);
     });
   }
 
@@ -42,6 +42,8 @@ class _PomodoroScreenState extends State<PomodoroScreen> {
       final seconds = maxMinutes.inSeconds - 1;
       if (seconds < 0) {
         timer?.cancel();
+        reset();
+        startisPressed = !startisPressed;
       } else {
         maxMinutes = Duration(seconds: seconds);
       }
@@ -49,17 +51,27 @@ class _PomodoroScreenState extends State<PomodoroScreen> {
     });
   }
 
-  var isRunning = false;
+  // var isRunning = false;
+  // var isCompleted = true;
 
   void cancelTime({bool resets = true}) {
-    // if (resets) {
-    //   reset();
-    // }
+    if (resets) {
+      reset();
+    }
     setState(() {
       timer?.cancel();
       // isRunning = false;
     });
   }
+
+  void pauseTime({bool resets = true}) {
+    setState(() {
+      timer?.cancel();
+      // isRunning = false;
+    });
+  }
+
+  bool startisPressed = false;
 
   @override
   Widget build(BuildContext context) {
@@ -128,7 +140,6 @@ class _PomodoroScreenState extends State<PomodoroScreen> {
               //   ),
               // ),
               buildButton(),
-              buildTime(),
             ],
           ),
         ),
@@ -138,20 +149,18 @@ class _PomodoroScreenState extends State<PomodoroScreen> {
 
   Widget buildButton() {
     final isRunning = timer == null ? false : timer!.isActive;
-    final isCompleted = maxMinutes.inSeconds != 0;
-    print('is it running````??????````: ' '$isRunning');
-    print('is it completed````??????````: ' '$isCompleted');
+    final isCompleted = maxMinutes.inSeconds == 0;
 
-    return isRunning || isCompleted
+    return (isRunning || !isCompleted) && startisPressed
         ? Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               ButtonWidget(
                   text: isRunning ? 'pause' : 'resume',
                   onClicked: () {
-                    print('is it running??????: ' '$isRunning');
+                    // print('is it running??????: ' '$isRunning');
                     if (isRunning) {
-                      cancelTime();
+                      pauseTime();
                     } else {
                       startTimer();
                     }
@@ -159,13 +168,19 @@ class _PomodoroScreenState extends State<PomodoroScreen> {
               const SizedBox(
                 width: 12.0,
               ),
-              ButtonWidget(text: 'cancel', onClicked: () {}),
+              ButtonWidget(
+                  text: 'cancel',
+                  onClicked: () {
+                    cancelTime();
+                    startisPressed = !startisPressed;
+                  }),
             ],
           )
         : ButtonWidget(
             text: 'START',
             onClicked: () {
               startTimer();
+              startisPressed = !startisPressed;
             },
             foregroundColor: Colors.white,
             backgroundColor: mypink,
