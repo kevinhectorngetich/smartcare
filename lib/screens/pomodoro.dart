@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:rive/rive.dart';
 import 'package:smartcare/common/theme.dart';
 import 'package:smartcare/constants/constants.dart';
 import 'package:smartcare/constants/text_style.dart';
+import 'package:smartcare/widgets/button_widget.dart';
 
 class PomodoroScreen extends StatefulWidget {
   const PomodoroScreen({super.key});
@@ -12,6 +15,52 @@ class PomodoroScreen extends StatefulWidget {
 }
 
 class _PomodoroScreenState extends State<PomodoroScreen> {
+  // Duration duration = Duration();
+  Duration maxMinutes = const Duration(minutes: 25);
+  Timer? timer;
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   startTimer();
+  // }
+
+  void startTimer() {
+    timer = Timer.periodic(const Duration(seconds: 1), (_) {
+      return minusTime();
+    });
+  }
+
+  void reset() {
+    setState(() {
+      maxMinutes = const Duration();
+    });
+  }
+
+  void minusTime() {
+    setState(() {
+      final seconds = maxMinutes.inSeconds - 1;
+      if (seconds < 0) {
+        timer?.cancel();
+      } else {
+        maxMinutes = Duration(seconds: seconds);
+      }
+      // print(maxMinutes.inSeconds);
+    });
+  }
+
+  var isRunning = false;
+
+  void cancelTime({bool resets = true}) {
+    // if (resets) {
+    //   reset();
+    // }
+    setState(() {
+      timer?.cancel();
+      // isRunning = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     double paddingHeight = MediaQuery.of(context).size.height * 0.05;
@@ -48,15 +97,13 @@ class _PomodoroScreenState extends State<PomodoroScreen> {
                 height: paddingHeight,
               ),
               Row(
-                children: const [
+                children: [
                   Padding(
-                    padding: EdgeInsets.only(right: 8.0, bottom: 8.0, top: 8.0),
-                    child: Text(
-                      '24.59',
-                      style: ktimerTextStyles,
-                    ),
+                    padding: const EdgeInsets.only(
+                        right: 8.0, bottom: 8.0, top: 8.0),
+                    child: buildTime(),
                   ),
-                  Icon(
+                  const Icon(
                     Icons.notifications_active,
                     color: mypink,
                   )
@@ -70,20 +117,70 @@ class _PomodoroScreenState extends State<PomodoroScreen> {
               const SizedBox(
                 height: 30.0,
               ),
-              TextButton(
-                style: kstartTimerButton(),
-                onPressed: () {
-                  setState(() {});
-                },
-                child: const Text(
-                  'START',
-                  style: kstartButtonTextStyles,
-                ),
-              ),
+              // TextButton(
+              //   style: kstartTimerButton(),
+              //   onPressed: () {
+              //     setState(() {});
+              //   },
+              //   child: const Text(
+              //     'START',
+              //     style: kstartButtonTextStyles,
+              //   ),
+              // ),
+              buildButton(),
+              buildTime(),
             ],
           ),
         ),
       )),
+    );
+  }
+
+  Widget buildButton() {
+    final isRunning = timer == null ? false : timer!.isActive;
+    final isCompleted = maxMinutes.inSeconds != 0;
+    print('is it running````??????````: ' '$isRunning');
+    print('is it completed````??????````: ' '$isCompleted');
+
+    return isRunning || isCompleted
+        ? Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ButtonWidget(
+                  text: isRunning ? 'pause' : 'resume',
+                  onClicked: () {
+                    print('is it running??????: ' '$isRunning');
+                    if (isRunning) {
+                      cancelTime();
+                    } else {
+                      startTimer();
+                    }
+                  }),
+              const SizedBox(
+                width: 12.0,
+              ),
+              ButtonWidget(text: 'cancel', onClicked: () {}),
+            ],
+          )
+        : ButtonWidget(
+            text: 'START',
+            onClicked: () {
+              startTimer();
+            },
+            foregroundColor: Colors.white,
+            backgroundColor: mypink,
+          );
+  }
+
+  Widget buildTime() {
+    //? What it does: 9 --> 09 | 12 --> 12
+    String twoDigits(int n) => n.toString().padLeft(2, '0');
+    final minutes = twoDigits(maxMinutes.inMinutes.remainder(60));
+    final seconds = twoDigits(maxMinutes.inSeconds.remainder(60));
+
+    return Text(
+      '$minutes:$seconds',
+      style: ktimerTextStyles,
     );
   }
 }
