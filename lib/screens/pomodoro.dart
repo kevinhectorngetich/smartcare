@@ -18,6 +18,7 @@ class _PomodoroScreenState extends State<PomodoroScreen> {
   // Duration duration = Duration();
   Duration maxMinutes = const Duration(minutes: 25);
   Timer? timer;
+  double _progressValue = 0.0;
 
   // @override
   // void initState() {
@@ -46,9 +47,13 @@ class _PomodoroScreenState extends State<PomodoroScreen> {
         startisPressed = !startisPressed;
       } else {
         maxMinutes = Duration(seconds: seconds);
+        _progressValue += 1 / 1500;
       }
+      print('$_progressValue' 'in set state: below is out');
+
       // print(maxMinutes.inSeconds);
     });
+    print(_progressValue);
   }
 
   // var isRunning = false;
@@ -69,6 +74,12 @@ class _PomodoroScreenState extends State<PomodoroScreen> {
       timer?.cancel();
       // isRunning = false;
     });
+  }
+
+  @override
+  void dispose() {
+    timer?.cancel();
+    super.dispose();
   }
 
   bool startisPressed = false;
@@ -109,23 +120,28 @@ class _PomodoroScreenState extends State<PomodoroScreen> {
                 height: paddingHeight,
               ),
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(
                         right: 8.0, bottom: 8.0, top: 8.0),
                     child: buildTime(),
                   ),
+                  // const SizedBox(
+                  //   width: 5.0,
+                  // ),
                   const Icon(
                     Icons.notifications_active,
                     color: mypink,
+                    size: 34,
                   )
                 ],
               ),
-              const LinearProgressIndicator(
-                  // color: Colors.white30,
-                  // value: 30.0,
-                  // valueColor: Color(c),
-                  ),
+              LinearProgressIndicator(
+                // color: Colors.white30,
+                value: _progressValue,
+                // valueColor: Color(c),
+              ),
               const SizedBox(
                 height: 30.0,
               ),
@@ -173,6 +189,7 @@ class _PomodoroScreenState extends State<PomodoroScreen> {
                   onClicked: () {
                     cancelTime();
                     startisPressed = !startisPressed;
+                    _progressValue = 0.0;
                   }),
             ],
           )
