@@ -301,6 +301,6 @@ class _ChartScreenState extends State<ChartScreen> {
     );
   }
 }
-// TODO: Use icons
-// TODO: Add all the time_usage and use it in chart
+// TODO: Use icons 7.40 - 8.40 AM
+// TODO: Add all the time_usage and use it in chart 9-10.00 AM
 // TODO: Figure out how to notify user if 4hrs is passed
