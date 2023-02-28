@@ -105,7 +105,7 @@ class _ChartScreenState extends State<ChartScreen> {
   Future<List<AppUsageInfo>> getUsageStats() async {
     try {
       DateTime endDate = DateTime.now();
-      DateTime startDate = endDate.subtract(Duration(hours: 24));
+      DateTime startDate = endDate.subtract(const Duration(hours: 24));
       List<AppUsageInfo> infoList =
           await AppUsage().getAppUsage(startDate, endDate);
       return infoList;
@@ -115,8 +115,10 @@ class _ChartScreenState extends State<ChartScreen> {
     }
   }
 
-  void getAppIconMethod(String packageName) async {
-    Application? app = await DeviceApps.getApp(packageName);
+  Future<Image> getAppIconMethod(String packageName) async {
+    ApplicationWithIcon? app =
+        (await DeviceApps.getApp(packageName, true)) as ApplicationWithIcon?;
+    return Image.memory(app!.icon);
   }
 
   @override
@@ -234,61 +236,123 @@ class _ChartScreenState extends State<ChartScreen> {
                                 itemBuilder: (context, index) {
                                   AppUsageInfo info = infoList[index];
                                   // getAppIconMethod();
-                                  //TODO: use this icon
-                                  // Uint8List? icon = getAppIconMethod(info.packageName);
+
+                                  // Image? icon =
 
                                   // final key = appImages.keys.elementAt(index);
                                   // final value =appImages.values.elementAt(index);
                                   // return ListTile(
                                   //   leading: ,
                                   // );
+
+                                  // FORMATTER FO RETURN TYPE OF ANDROID
+                                  String extractString() {
+                                    if (info.appName != 'android') {
+                                      return info.appName;
+                                    } else {
+                                      String input = info.packageName;
+                                      int startIndex = input.indexOf('com.') +
+                                          4; // Add 4 to skip "com."
+                                      int endIndex =
+                                          input.indexOf('.', startIndex);
+                                      //? For now am using input.length since there
+                                      //? is a variations of package name: like:
+                                      //? 'com.github.android' and 'com.android.chrome'
+                                      return input.substring(
+                                          startIndex, input.length);
+                                    }
+                                  }
+
+                                  var appName = extractString();
+                                  // UI FOR TIME USAGE IN LISTVIEW
+                                  Widget buildTime() {
+                                    //? What it does: 9 --> 09 | 12 --> 12
+                                    String twoDigits(int n) =>
+                                        n.toString().padLeft(1, '0');
+                                    final hours = twoDigits(
+                                        info.usage.inHours.remainder(60));
+                                    final minutes = twoDigits(
+                                        info.usage.inMinutes.remainder(60));
+                                    var check1hr = hours == '1' ? 'hr' : 'hrs';
+                                    var check1min =
+                                        minutes == '1' ? 'min' : 'mins';
+
+                                    return Text(
+                                      '$hours $check1hr $minutes $check1min',
+                                      style: klistviewSubTitle,
+                                    );
+                                  }
+
                                   return Padding(
                                     padding: const EdgeInsets.only(
                                         top: 8.0,
                                         bottom: 8.0,
                                         left: 30.0,
                                         right: 30.0),
-                                    child: Column(
-                                      children: [
-                                        Row(
-                                          children: [
-                                            // Image.asset(
-                                            //   info.,
-                                            //   height: 50.0,
-                                            //   width: 50.0,
-                                            // ),
-                                            const SizedBox(
-                                              width: 15.0,
-                                            ),
-                                            Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
+                                    child: FutureBuilder<Image>(
+                                        future:
+                                            getAppIconMethod(info.packageName),
+                                        builder: (context, snapshot) {
+                                          if (snapshot.hasData) {
+                                            return Column(
                                               children: [
-                                                Text(
-                                                  info.appName,
-                                                  style: klistviewTitle,
+                                                Row(
+                                                  children: [
+                                                    SizedBox(
+                                                      height: 50.0,
+                                                      width: 50.0,
+                                                      child: snapshot.data!,
+                                                    ),
+                                                    const SizedBox(
+                                                      width: 15.0,
+                                                    ),
+                                                    Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        SizedBox(
+                                                          width: 150.0,
+                                                          child: Text(
+                                                            appName,
+                                                            style:
+                                                                klistviewTitle,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                          ),
+                                                        ),
+                                                        // Text(
+                                                        //   '${info.usage.inHours}'
+                                                        //   ' hrs',
+                                                        //   style:
+                                                        //       klistviewSubTitle,
+                                                        // ),
+                                                        buildTime(),
+                                                      ],
+                                                    )
+                                                  ],
                                                 ),
-                                                Text(
-                                                  '${info.usage.inHours}'
-                                                  ' hrs',
-                                                  style: klistviewSubTitle,
+                                                const SizedBox(
+                                                  height: 5.0,
+                                                ),
+                                                const Divider(
+                                                  color: Colors.white24,
                                                 ),
                                               ],
-                                            )
-                                          ],
-                                        ),
-                                        const SizedBox(
-                                          height: 5.0,
-                                        ),
-                                        const Divider(
-                                          color: Colors.white24,
-                                        ),
-                                      ],
-                                    ),
+                                            );
+                                          } else if (snapshot.hasError) {
+                                            return const Text(
+                                                'Error loading icon');
+                                          } else {
+                                            return const CircularProgressIndicator();
+                                          }
+                                        }),
                                   );
                                 });
                           } else {
-                            return Center(child: CircularProgressIndicator());
+                            return const Center(
+                                child: CircularProgressIndicator());
                           }
                         }),
                   ),
