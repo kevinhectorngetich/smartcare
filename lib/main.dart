@@ -3,6 +3,7 @@ import 'package:smartcare/common/theme.dart';
 import 'package:smartcare/screens/home_screen.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 

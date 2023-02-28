@@ -15,13 +15,6 @@ class ChartScreen extends StatefulWidget {
   State<ChartScreen> createState() => _ChartScreenState();
 }
 
-Map<String, String> appImages = {
-  'instagaram': 'assets/images/instagram.png',
-  'whatsapp': 'assets/images/whatsapp.png',
-  'facebook': 'assets/images/instagram.png',
-  'meta': 'assets/images/whatsapp.png',
-};
-
 class _ChartScreenState extends State<ChartScreen> {
   SideTitles get _bottomTitles => SideTitles(
         showTitles: true,
@@ -105,15 +98,38 @@ class _ChartScreenState extends State<ChartScreen> {
   Future<List<AppUsageInfo>> getUsageStats() async {
     try {
       DateTime endDate = DateTime.now();
-      DateTime startDate = endDate.subtract(const Duration(hours: 24));
+      DateTime startDate = endDate.subtract(const Duration(days: 7));
       List<AppUsageInfo> infoList =
           await AppUsage().getAppUsage(startDate, endDate);
+
+      print(infoList);
       return infoList;
     } on AppUsageException catch (exception) {
       print(exception);
       return [];
     }
   }
+
+  //? GET TOTAL USAGE TRIAL
+  // Future<Duration> getTotalScreenTimeUsage() async {
+  //   try {
+  //     DateTime endDate = DateTime.now();
+  //     DateTime startDate = endDate.subtract(const Duration(days: 7));
+  //     List<AppUsageInfo> infoList =
+  //         await AppUsage().getAppUsage(startDate, endDate);
+
+  //     // Calculate total screen time usage
+  //     Duration totalUsage = Duration.zero;
+  //     for (var info in infoList) {
+  //       totalUsage += info.usage;
+  //     }
+
+  //     return totalUsage;
+  //   } on AppUsageException catch (exception) {
+  //     print(exception);
+  //     return Duration.zero;
+  //   }
+  // }
 
   Future<Image> getAppIconMethod(String packageName) async {
     ApplicationWithIcon? app =
@@ -235,15 +251,6 @@ class _ChartScreenState extends State<ChartScreen> {
                                 itemCount: infoList.length,
                                 itemBuilder: (context, index) {
                                   AppUsageInfo info = infoList[index];
-                                  // getAppIconMethod();
-
-                                  // Image? icon =
-
-                                  // final key = appImages.keys.elementAt(index);
-                                  // final value =appImages.values.elementAt(index);
-                                  // return ListTile(
-                                  //   leading: ,
-                                  // );
 
                                   // FORMATTER FO RETURN TYPE OF ANDROID
                                   String extractString() {
