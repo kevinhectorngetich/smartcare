@@ -1,5 +1,6 @@
 import 'package:app_usage/app_usage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:smartcare/common/theme.dart';
 import 'package:smartcare/constants/constants.dart';
 import 'package:smartcare/constants/text_style.dart';
@@ -12,23 +13,19 @@ class SmartCareScreen extends StatefulWidget {
 }
 
 class _SmartCareScreenState extends State<SmartCareScreen> {
-  void getUsageStats() async {
-    try {
-      DateTime endDate = DateTime.now();
-      DateTime startDate = endDate.subtract(Duration(hours: 1));
-      List<AppUsageInfo> infoList =
-          await AppUsage().getAppUsage(startDate, endDate);
-      List<AppUsageInfo> _infos;
-      setState(() => _infos = infoList);
-      print(infoList);
-      print('above------  above');
+  final platform =
+      const MethodChannel('com.kevinhectorngetich.smartcare/usage_stats');
 
-      for (var info in infoList) {
-        print(info.toString());
-      }
-    } on AppUsageException catch (exception) {
-      print(exception);
-    }
+  @override
+  void initState() {
+    super.initState();
+    getWhatsAppUsageStats();
+  }
+
+  void getWhatsAppUsageStats() async {
+    var time1 = await platform.invokeMethod<int>("getWhatsAppUsage");
+    var time = Duration(milliseconds: time1 ?? 0);
+    print(time);
   }
 
   @override
@@ -87,9 +84,7 @@ class _SmartCareScreenState extends State<SmartCareScreen> {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             TextButton(
-                              onPressed: () {
-                                getUsageStats();
-                              },
+                              onPressed: () {},
                               style: kviewStats(),
                               child: const Text(
                                 'view stats',
