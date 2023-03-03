@@ -89,7 +89,7 @@ class _ChartScreenState extends State<ChartScreen> {
   //   }
   // }
   Future<List<AppUsageInfo>>? _infos;
-  Future<Map<String, String>?>? weekly;
+  Future<Map<String, int>?>? weekly;
 
   @override
   void initState() {
@@ -129,10 +129,10 @@ class _ChartScreenState extends State<ChartScreen> {
   final platform =
       const MethodChannel('com.kevinhectorngetich.smartcare/usage_stats');
 
-  Future<Map<String, String>?> getUsageStatsForWeek() async {
+  Future<Map<String, int>?> getUsageStatsForWeek() async {
     final Map<String, dynamic> args = <String, dynamic>{};
-    final Map<String, String>? usageStatsMap = await platform
-        .invokeMapMethod<String, String>('getUsageStatsForWeek', args);
+    final Map<String, int>? usageStatsMap = await platform
+        .invokeMapMethod<String, int>('getUsageStatsForWeek', args);
     return usageStatsMap;
   }
 
