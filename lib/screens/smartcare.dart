@@ -19,7 +19,7 @@ class _SmartCareScreenState extends State<SmartCareScreen> {
   @override
   void initState() {
     super.initState();
-    getWhatsAppUsageStats();
+    // getWhatsAppUsageStats();
   }
 
   void getWhatsAppUsageStats() async {
