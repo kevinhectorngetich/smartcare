@@ -1,11 +1,14 @@
+import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:app_usage/app_usage.dart';
 import 'package:device_apps/device_apps.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:smartcare/constants/constants.dart';
 import 'package:smartcare/constants/text_style.dart';
 import 'package:smartcare/models/bar_data.dart';
+import 'package:smartcare/services/notification.dart';
 import 'package:usage_stats/usage_stats.dart';
 import 'package:intl/intl.dart';
 
@@ -17,6 +20,8 @@ class ChartScreen extends StatefulWidget {
 }
 
 class _ChartScreenState extends State<ChartScreen> {
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
   SideTitles get _bottomTitles => SideTitles(
         showTitles: true,
         getTitlesWidget: (value, meta) {
@@ -96,6 +101,8 @@ class _ChartScreenState extends State<ChartScreen> {
   void initState() {
     super.initState();
     _infos = getUsageStats();
+    backgroundTask();
+    // initializeNotifications();
     // weekly = getUsageStatsForWeek();
     // print('for```````MethodChannel');
     // getWhatsAppUsageStats();
@@ -115,9 +122,7 @@ class _ChartScreenState extends State<ChartScreen> {
       DateTime now = DateTime.now();
       DateTime start = DateTime(now.year, now.month, now.day);
       DateTime end = DateTime.now();
-      print('---------');
-      print(start);
-      print(end);
+
       List<AppUsageInfo> infoList = await AppUsage().getAppUsage(start, end);
 
       // print(infoList);
@@ -125,8 +130,6 @@ class _ChartScreenState extends State<ChartScreen> {
       for (var info in infoList) {
         totalUsage += info.usage.inHours;
       }
-      print('for```````AppUsage');
-      print(totalUsage);
 
       return infoList;
     } on AppUsageException catch (exception) {
@@ -145,6 +148,17 @@ class _ChartScreenState extends State<ChartScreen> {
     return usageStatsMap;
   }
 
+  // void initAlarm() async {
+  //   await AndroidAlarmManager.periodic(
+  //     const Duration(minutes: 15),
+  //     0,
+  //     backgroundTask,
+  //     wakeup: true,
+  //     exact: true,
+  //     rescheduleOnReboot: true,
+  //     startAt: DateTime.now(),
+  //   );
+  // }
   // void getWhatsAppUsageStats() {
   //   platform.invokeMapMethod("getWhatsAppUsage");
   // }
