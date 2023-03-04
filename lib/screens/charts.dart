@@ -95,7 +95,7 @@ class _ChartScreenState extends State<ChartScreen> {
   @override
   void initState() {
     super.initState();
-    // _infos = getUsageStats();
+    _infos = getUsageStats();
     // weekly = getUsageStatsForWeek();
     // print('for```````MethodChannel');
     // getWhatsAppUsageStats();
@@ -113,8 +113,11 @@ class _ChartScreenState extends State<ChartScreen> {
   Future<List<AppUsageInfo>> getUsageStats() async {
     try {
       DateTime now = DateTime.now();
-      DateTime start = DateTime(now.year, now.month, now.day - now.weekday);
-      DateTime end = DateTime(now.year, now.month, now.day - now.weekday + 7);
+      DateTime start = DateTime(now.year, now.month, now.day);
+      DateTime end = DateTime.now();
+      print('---------');
+      print(start);
+      print(end);
       List<AppUsageInfo> infoList = await AppUsage().getAppUsage(start, end);
 
       // print(infoList);
@@ -166,15 +169,6 @@ class _ChartScreenState extends State<ChartScreen> {
   @override
   Widget build(BuildContext context) {
     double paddingHeight = MediaQuery.of(context).size.height * 0.05;
-    final days = [
-      'Sunday',
-      'Monday',
-      'Tuesday',
-      'Wednesday',
-      'Thursday',
-      'Friday',
-      'Saturday'
-    ];
 
     return Scaffold(
       backgroundColor: mybackgroundPurple,
@@ -277,46 +271,6 @@ class _ChartScreenState extends State<ChartScreen> {
                             ),
                             leftTitles: AxisTitles(sideTitles: _sideTitles)),
 
-                        // backgroundColor:
-                        // barGroups: BarData.barData
-                        //     .map(
-                        //       (data) => BarChartGroupData(x: data.id, barRods: [
-                        //         BarChartRodData(
-                        //           toY: data.hoursUsed,
-                        //           color: mybarRodOrange,
-                        //           borderRadius: const BorderRadius.all(
-                        //               Radius.circular(20.0)),
-                        //           backDrawRodData: BackgroundBarChartRodData(
-                        //               fromY: 0,
-                        //               toY: 24,
-                        //               color: Colors.white30,
-                        //               show: true),
-                        //         ),
-                        //       ]),
-                        //     )
-                        //     .toList(),
-                        //? Trial 2
-                        // barGroups: usageData?.entries.map((entry) {
-                        //       final index =
-                        //           usageData!.entries.toList().indexOf(entry);
-                        //       return BarChartGroupData(
-                        //         x: index,
-                        //         barRods: [
-                        //           BarChartRodData(
-                        //             toY: entry.value.toDouble(),
-                        //             color: mybarRodOrange,
-                        //             borderRadius: BorderRadius.circular(20),
-                        //             backDrawRodData: BackgroundBarChartRodData(
-                        //               show: true,
-                        //               color: Colors.white30,
-                        //               fromY: 0,
-                        //               toY: 24,
-                        //             ),
-                        //           ),
-                        //         ],
-                        //       );
-                        //     }).toList() ??
-                        //     [],
                         //? trail 3
                         barGroups: usageData?.keys.map((day) {
                           final index = usageData!.keys.toList().indexOf(day);
