@@ -57,7 +57,7 @@ class _ChartScreenState extends State<ChartScreen> {
         interval: 6,
         reservedSize: 32.0,
         getTitlesWidget: (value, meta) => Text(
-          value == 0 ? '0' : '${value.toInt()}' ' hrs',
+          value == 0 ? '0' : '${value.toInt()}' ' hr',
           style: const TextStyle(
               fontFamily: 'Poppins', color: Colors.white, fontSize: 10.0),
         ),
@@ -90,14 +90,20 @@ class _ChartScreenState extends State<ChartScreen> {
   // }
   Future<List<AppUsageInfo>>? _infos;
   Future<Map<String, int>?>? weekly;
+  Map<String, int>? usageData;
 
   @override
   void initState() {
     super.initState();
     // _infos = getUsageStats();
-    weekly = getUsageStatsForWeek();
+    // weekly = getUsageStatsForWeek();
     // print('for```````MethodChannel');
     // getWhatsAppUsageStats();
+    getUsageStatsForWeek().then((data) {
+      setState(() {
+        usageData = data;
+      });
+    });
 
     print(weekly);
     // printUsageStatsForWeek();
@@ -151,81 +157,6 @@ class _ChartScreenState extends State<ChartScreen> {
     }
   }
 
-  // Map<int, List<UsageInfo>> usageStatsByDay = {};
-
-  // for (int i = 1; i <= 7; i++) {
-  //   // loop range to include all days
-  //   usageStatsByDay[i] = [];
-  // }
-
-  // Future<void> getAppUsageStats() async {
-  //   DateTime now = DateTime.now();
-  //   DateTime start = DateTime(now.year, now.month, now.day - now.weekday);
-  //   DateTime end = DateTime(now.year, now.month, now.day - now.weekday + 7);
-  //   // DateTime startOfDay = DateTime(now.year, now.month, now.day);
-
-  //   try {
-  //     List<UsageInfo> usageStatsList =
-  //         await UsageStats.queryUsageStats(start, end);
-
-  //     for (int i = 1; i <= 7; i++) {
-  //       // loop range to include all days
-  //       List<UsageInfo> usageStatsListForDay =
-  //           usageStatsList.where((usageStats) {
-  //         if (usageStats.lastTimeUsed == null ||
-  //             usageStats.lastTimeUsed == '0') {
-  //           return false;
-  //         }
-  //         DateTime usageTime = DateTime.fromMillisecondsSinceEpoch(
-  //                 int.parse(usageStats.lastTimeUsed!))
-  //             .toLocal();
-  //         return usageTime.weekday == i;
-  //       }).toList();
-  //       List<UsageInfo> usageStatsForDay = [];
-  //       Duration totalDuration = Duration.zero;
-
-  //       for (UsageInfo usageStats in usageStatsListForDay) {
-  //         String dateString = usageStats.lastTimeUsed!;
-  //         DateTime usageTime =
-  //             DateTime.fromMillisecondsSinceEpoch(int.parse(dateString))
-  //                 .toLocal();
-  //         usageStatsForDay.add(usageStats);
-  //         totalDuration += usageTime.difference(
-  //             DateTime(usageTime.year, usageTime.month, usageTime.day));
-  //       }
-
-  //       String dayOfWeek = _getDayOfWeek(i);
-  //       int minutes =
-  //           (totalDuration.inMilliseconds / Duration.millisecondsPerMinute)
-  //               .round();
-  //       print("$dayOfWeek: $minutes minutes");
-  //     }
-  //   } on PlatformException catch (e) {
-  //     print(e);
-  //   }
-  // }
-
-  // String _getDayOfWeek(int dayOfWeek) {
-  //   switch (dayOfWeek) {
-  //     case 1:
-  //       return 'Sunday';
-  //     case 2:
-  //       return 'Monday';
-  //     case 3:
-  //       return 'Tuesday';
-  //     case 4:
-  //       return 'Wednesday';
-  //     case 5:
-  //       return 'Thursday';
-  //     case 6:
-  //       return 'Friday';
-  //     case 7:
-  //       return 'Saturday';
-  //     default:
-  //       return '';
-  //   }
-  // }
-
   Future<Image> getAppIconMethod(String packageName) async {
     ApplicationWithIcon? app =
         (await DeviceApps.getApp(packageName, true)) as ApplicationWithIcon?;
@@ -235,6 +166,15 @@ class _ChartScreenState extends State<ChartScreen> {
   @override
   Widget build(BuildContext context) {
     double paddingHeight = MediaQuery.of(context).size.height * 0.05;
+    final days = [
+      'Sunday',
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday'
+    ];
 
     return Scaffold(
       backgroundColor: mybackgroundPurple,
@@ -269,57 +209,135 @@ class _ChartScreenState extends State<ChartScreen> {
                     padding: const EdgeInsets.all(15.0),
                     child: BarChart(
                       BarChartData(
-                          borderData: FlBorderData(
-                            show: false,
+                        borderData: FlBorderData(
+                          show: false,
 
-                            // border: Border.all(
-                            //   style: BorderStyle.solid,
-                            //   color: Colors.white30,
-                            // ),
-                          ),
-                          maxY: 24,
-                          groupsSpace: 12,
-                          gridData: FlGridData(
-                            show: false,
-                            checkToShowHorizontalLine: (value) =>
-                                value % 3 == 0,
-                            getDrawingHorizontalLine: (value) {
-                              return FlLine(
-                                color: Colors.white,
-                                strokeWidth: 2.8,
-                              );
-                            },
-                          ),
-                          barTouchData: BarTouchData(enabled: true),
-                          titlesData: FlTitlesData(
-                              topTitles: AxisTitles(
-                                  sideTitles: SideTitles(showTitles: false)),
-                              rightTitles: AxisTitles(
-                                  sideTitles: SideTitles(showTitles: false)),
-                              // bottomTitles:
-                              bottomTitles:
-                                  AxisTitles(sideTitles: _bottomTitles),
-                              leftTitles: AxisTitles(sideTitles: _sideTitles)),
+                          // border: Border.all(
+                          //   style: BorderStyle.solid,
+                          //   color: Colors.white30,
+                          // ),
+                        ),
+                        maxY: 24,
+                        groupsSpace: 12,
+                        gridData: FlGridData(
+                          show: false,
+                          checkToShowHorizontalLine: (value) => value % 3 == 0,
+                          getDrawingHorizontalLine: (value) {
+                            return FlLine(
+                              color: Colors.white,
+                              strokeWidth: 2.8,
+                            );
+                          },
+                        ),
+                        barTouchData: BarTouchData(enabled: true),
+                        titlesData: FlTitlesData(
+                            topTitles: AxisTitles(
+                                sideTitles: SideTitles(showTitles: false)),
+                            rightTitles: AxisTitles(
+                                sideTitles: SideTitles(showTitles: false)),
+                            // bottomTitles:
+                            bottomTitles: AxisTitles(
+                              sideTitles: SideTitles(
+                                showTitles: true,
+                                getTitlesWidget: (value, meta) {
+                                  String text = '';
+                                  switch (value.toInt()) {
+                                    case 0:
+                                      text = 'Sun';
+                                      break;
+                                    case 1:
+                                      text = 'Mon';
+                                      break;
+                                    case 2:
+                                      text = 'Tue';
+                                      break;
+                                    case 3:
+                                      text = 'Wed';
+                                      break;
+                                    case 4:
+                                      text = 'Thur';
+                                      break;
+                                    case 5:
+                                      text = 'Fri';
+                                      break;
+                                    case 6:
+                                      text = 'Sat';
+                                      break;
+                                  }
 
-                          // backgroundColor:
-                          barGroups: BarData.barData
-                              .map(
-                                (data) =>
-                                    BarChartGroupData(x: data.id, barRods: [
-                                  BarChartRodData(
-                                    toY: data.hoursUsed,
-                                    color: mybarRodOrange,
-                                    borderRadius: const BorderRadius.all(
-                                        Radius.circular(20.0)),
-                                    backDrawRodData: BackgroundBarChartRodData(
-                                        fromY: 0,
-                                        toY: 24,
-                                        color: Colors.white30,
-                                        show: true),
-                                  ),
-                                ]),
-                              )
-                              .toList()),
+                                  return Text(
+                                    text,
+                                    style: const TextStyle(
+                                        fontFamily: 'Poppins',
+                                        color: Colors.white,
+                                        fontSize: 10.0),
+                                  );
+                                },
+                              ),
+                            ),
+                            leftTitles: AxisTitles(sideTitles: _sideTitles)),
+
+                        // backgroundColor:
+                        // barGroups: BarData.barData
+                        //     .map(
+                        //       (data) => BarChartGroupData(x: data.id, barRods: [
+                        //         BarChartRodData(
+                        //           toY: data.hoursUsed,
+                        //           color: mybarRodOrange,
+                        //           borderRadius: const BorderRadius.all(
+                        //               Radius.circular(20.0)),
+                        //           backDrawRodData: BackgroundBarChartRodData(
+                        //               fromY: 0,
+                        //               toY: 24,
+                        //               color: Colors.white30,
+                        //               show: true),
+                        //         ),
+                        //       ]),
+                        //     )
+                        //     .toList(),
+                        //? Trial 2
+                        // barGroups: usageData?.entries.map((entry) {
+                        //       final index =
+                        //           usageData!.entries.toList().indexOf(entry);
+                        //       return BarChartGroupData(
+                        //         x: index,
+                        //         barRods: [
+                        //           BarChartRodData(
+                        //             toY: entry.value.toDouble(),
+                        //             color: mybarRodOrange,
+                        //             borderRadius: BorderRadius.circular(20),
+                        //             backDrawRodData: BackgroundBarChartRodData(
+                        //               show: true,
+                        //               color: Colors.white30,
+                        //               fromY: 0,
+                        //               toY: 24,
+                        //             ),
+                        //           ),
+                        //         ],
+                        //       );
+                        //     }).toList() ??
+                        //     [],
+                        //? trail 3
+                        barGroups: usageData?.keys.map((day) {
+                          final index = usageData!.keys.toList().indexOf(day);
+                          return BarChartGroupData(
+                            x: index,
+                            barRods: [
+                              BarChartRodData(
+                                toY: usageData![day]!.toDouble(),
+                                color: mybarRodOrange,
+                                borderRadius: BorderRadius.circular(20),
+                                backDrawRodData: BackgroundBarChartRodData(
+                                  show: true,
+                                  color: Colors.white30,
+                                  fromY: 0,
+                                  toY: 24,
+                                ),
+                              ),
+                            ],
+                          );
+                        }).toList(),
+                      ),
                     ),
                   ),
                 ),

@@ -10,6 +10,10 @@ import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
 import java.text.SimpleDateFormat
 import java.util.*
+import android.app.AppOpsManager
+import android.content.Intent
+import android.os.Process
+import android.provider.Settings
 
 
 class MainActivity : FlutterActivity() {
@@ -18,6 +22,7 @@ class MainActivity : FlutterActivity() {
 
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
+        requestUsageStatsPermission()
         MethodChannel(
             flutterEngine.dartExecutor.binaryMessenger,
             CHANNEL
@@ -35,6 +40,17 @@ class MainActivity : FlutterActivity() {
             }
         }
     }
+private fun requestUsageStatsPermission() {
+    val appOpsManager = getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager
+    val mode = appOpsManager.checkOpNoThrow(
+        AppOpsManager.OPSTR_GET_USAGE_STATS,
+        Process.myUid(),
+        packageName
+    )
+    if (mode != AppOpsManager.MODE_ALLOWED) {
+        startActivity(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS))
+    }
+}
 
 
 //? TRYING only the apps the user has opened
