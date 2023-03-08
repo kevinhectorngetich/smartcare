@@ -6,16 +6,9 @@ import 'package:smartcare/common/theme.dart';
 import 'package:smartcare/screens/home_screen.dart';
 import 'package:smartcare/services/notification.dart';
 
-@pragma('vm:entry-point')
-void printHello() {
-  final DateTime now = DateTime.now();
-  final int isolateId = Isolate.current.hashCode;
-  print("[$now] Hello, world! isolate=${isolateId} function='$printHello'");
-}
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  print('Initializing FlutterBackground...');
+  // print('Initializing FlutterBackground...');
 
   // await FlutterBackground.initialize();
   // await FlutterBackground.enableBackgroundExecution();

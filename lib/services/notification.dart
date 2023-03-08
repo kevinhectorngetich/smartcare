@@ -1,6 +1,5 @@
 import 'package:app_usage/app_usage.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -56,9 +55,6 @@ Future<List<AppUsageInfo>> getUsageStats() async {
     for (var info in infoList) {
       totalUsage += info.usage.inHours;
     }
-    print(
-        'Im in NOTIFICATIONS-----------------------------------------------------');
-    print(totalUsage);
 
     return infoList;
   } on AppUsageException catch (exception) {
