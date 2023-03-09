@@ -82,3 +82,29 @@ const klistviewSubTitle = TextStyle(
   color: Colors.white,
   fontWeight: FontWeight.w400,
 );
+
+//! TIMETABLE
+const ktimeTableDate = TextStyle(
+  fontFamily: 'Poppins',
+  fontSize: 12.0,
+  color: Colors.white,
+  fontWeight: FontWeight.w500,
+);
+const ktimeTableLesson = TextStyle(
+  fontFamily: 'Poppins',
+  fontSize: 15.0,
+  color: Colors.white,
+  fontWeight: FontWeight.w600,
+);
+const ktimeTableTime = TextStyle(
+  fontFamily: 'Poppins',
+  fontSize: 15.0,
+  color: Colors.white,
+  fontWeight: FontWeight.w600,
+);
+const ktimeTimeTableTimeText = TextStyle(
+  fontFamily: 'Poppins',
+  fontSize: 15.0,
+  color: Colors.white,
+  fontWeight: FontWeight.w300,
+);

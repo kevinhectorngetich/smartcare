@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:smartcare/common/theme.dart';
 import 'package:smartcare/constants/constants.dart';
 import 'package:smartcare/constants/text_style.dart';
+import 'package:smartcare/screens/charts.dart';
 
 class SmartCareScreen extends StatefulWidget {
   const SmartCareScreen({super.key});
@@ -84,7 +85,10 @@ class _SmartCareScreenState extends State<SmartCareScreen> {
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             TextButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => const ChartScreen()));
+                              },
                               style: kviewStats(),
                               child: const Text(
                                 'view stats',

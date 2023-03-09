@@ -4,6 +4,7 @@ import 'package:smartcare/constants/text_style.dart';
 import 'package:smartcare/screens/charts.dart';
 import 'package:smartcare/screens/pomodoro.dart';
 import 'package:smartcare/screens/smartcare.dart';
+import 'package:smartcare/screens/timetable.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -17,7 +18,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   final screens = [
     const SmartCareScreen(),
-    const ChartScreen(),
+    // const ChartScreen(),
+    const TimeTable(),
     const PomodoroScreen(),
     // HomePage()
     // BarChartWidget(),
@@ -51,9 +53,9 @@ class _HomeScreenState extends State<HomeScreen> {
               label: 'Home',
             ),
             NavigationDestination(
-              selectedIcon: Icon(Icons.bar_chart_rounded),
-              icon: Icon(Icons.bar_chart_rounded, color: Colors.white38),
-              label: 'Chart',
+              selectedIcon: Icon(Icons.calendar_month_rounded),
+              icon: Icon(Icons.calendar_month_rounded, color: Colors.white38),
+              label: 'Timetable',
             ),
             NavigationDestination(
               selectedIcon: Icon(Icons.more_time_rounded),
