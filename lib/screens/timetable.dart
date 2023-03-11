@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:smartcare/constants/constants.dart';
 
 import '../constants/input_decorations.dart';
@@ -261,9 +262,16 @@ class _TimeTableState extends State<TimeTable> {
                                       style: kcardTextStyle,
                                     ),
                                     Text(
-                                      '${startTime?.hour.toString() ?? _timeOfDay.hour.toString()}'
-                                      ':'
-                                      '${startTime?.minute.toString() ?? _timeOfDay.minute.toString()}',
+                                      // '${startTime?.hour.toString() ?? _timeOfDay.hour.toString()}'
+                                      // ':'
+                                      // '${startTime?.minute.toString() ?? _timeOfDay.minute.toString()}',
+                                      DateFormat('hh:mm a').format(DateTime(
+                                        DateTime.now().year,
+                                        DateTime.now().month,
+                                        DateTime.now().day,
+                                        startTime?.hour ?? _timeOfDay.hour,
+                                        startTime?.minute ?? _timeOfDay.minute,
+                                      )),
                                       style: kbottomSheetDigit,
                                     ),
                                   ],
@@ -290,6 +298,31 @@ class _TimeTableState extends State<TimeTable> {
                                 stopTime =
                                     await selectStopTime(context, stopTime);
                                 setState(() {});
+                                // final selectedStopTime =
+                                //     await selectStopTime(context, stopTime);
+                                // if (selectedStopTime != null &&
+                                //     (startTime == null ||
+                                //         selectedStopTime.isAfter(startTime))) {
+                                //   stopTime = selectedStopTime;
+                                // } else {
+                                //   // Show error message if the stop time is not valid
+                                //   showDialog(
+                                //     context: context,
+                                //     builder: (context) => AlertDialog(
+                                //       title: Text('Invalid Stop Time'),
+                                //       content: Text(
+                                //           'Please select a stop time that is after the start time.'),
+                                //       actions: [
+                                //         TextButton(
+                                //           child: Text('OK'),
+                                //           onPressed: () =>
+                                //               Navigator.pop(context),
+                                //         ),
+                                //       ],
+                                //     ),
+                                //   );
+                                // }
+                                // setState(() {});
                               },
                               child: Padding(
                                 padding: const EdgeInsets.only(
@@ -305,9 +338,13 @@ class _TimeTableState extends State<TimeTable> {
                                       style: kcardTextStyle,
                                     ),
                                     Text(
-                                      '${stopTime?.hour.toString() ?? _endTimeNow.hour.toString()}'
-                                      ':'
-                                      '${stopTime?.minute.toString() ?? _endTimeNow.minute.toString()}',
+                                      DateFormat('hh:mm a').format(DateTime(
+                                        DateTime.now().year,
+                                        DateTime.now().month,
+                                        DateTime.now().day,
+                                        stopTime?.hour ?? _endTimeNow.hour,
+                                        stopTime?.minute ?? _endTimeNow.minute,
+                                      )),
                                       style: kbottomSheetDigit,
                                     ),
                                   ],
