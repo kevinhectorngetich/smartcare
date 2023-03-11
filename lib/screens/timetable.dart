@@ -298,31 +298,6 @@ class _TimeTableState extends State<TimeTable> {
                                 stopTime =
                                     await selectStopTime(context, stopTime);
                                 setState(() {});
-                                // final selectedStopTime =
-                                //     await selectStopTime(context, stopTime);
-                                // if (selectedStopTime != null &&
-                                //     (startTime == null ||
-                                //         selectedStopTime.isAfter(startTime))) {
-                                //   stopTime = selectedStopTime;
-                                // } else {
-                                //   // Show error message if the stop time is not valid
-                                //   showDialog(
-                                //     context: context,
-                                //     builder: (context) => AlertDialog(
-                                //       title: Text('Invalid Stop Time'),
-                                //       content: Text(
-                                //           'Please select a stop time that is after the start time.'),
-                                //       actions: [
-                                //         TextButton(
-                                //           child: Text('OK'),
-                                //           onPressed: () =>
-                                //               Navigator.pop(context),
-                                //         ),
-                                //       ],
-                                //     ),
-                                //   );
-                                // }
-                                // setState(() {});
                               },
                               child: Padding(
                                 padding: const EdgeInsets.only(
@@ -387,15 +362,6 @@ class _TimeTableState extends State<TimeTable> {
         });
   }
 
-  // Future<void> selectStartTime() async {
-  //   _startTime =
-  //       await showTimePicker(context: context, initialTime: _timeOfDay);
-  //   if (_startTime != null) {
-  //     setState(() {
-  //       _timeOfDay = _startTime!;
-  //     });
-  //   }
-  // }
   Future<TimeOfDay?> selectStartTime(
       BuildContext context, TimeOfDay? initialTime) async {
     return showTimePicker(
@@ -407,16 +373,6 @@ class _TimeTableState extends State<TimeTable> {
     return showTimePicker(
         context: context, initialTime: initialTime ?? _endTimeNow);
   }
-
-  // Future<void> selectStopTime() async {
-  //   _stopTime =
-  //       await showTimePicker(context: context, initialTime: _endTimeNow);
-  //   if (_stopTime != null) {
-  //     setState(() {
-  //       _endTimeNow = _stopTime!;
-  //     });
-  //   }
-  // }
 }
 
 List<String> _daysOftheWeek = [
