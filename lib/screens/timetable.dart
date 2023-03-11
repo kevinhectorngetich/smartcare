@@ -176,149 +176,172 @@ class _TimeTableState extends State<TimeTable> {
   }
 
   void _showModalBottomSheet(BuildContext context) {
+    TimeOfDay? startTime;
+    TimeOfDay? stopTime;
     showModalBottomSheet(
         context: context,
         builder: (context) {
-          return SingleChildScrollView(
-            child: Container(
-              color: mybackgroundPurple,
-              child: Padding(
-                padding: const EdgeInsets.only(
-                    left: 20.0, right: 20.0, top: 20.0, bottom: 40.0),
-                child: Form(
-                  // key: ,
-                  child: Column(
-                    children: [
-                      TextFormField(
-                        controller: lessonController,
-                        autofocus: false,
-                        keyboardType: TextInputType.name,
-                        validator: (value) {
-                          if (value!.isEmpty) {
-                            return ("Second name cannot be empty!");
-                          }
-                          return null;
-                        },
-                        onSaved: (value) {
-                          lessonController.text = value!;
-                        },
-                        textInputAction: TextInputAction.next,
-                        decoration: tFieldInputDecoration(
-                          inputlabeltext: 'Lesson/Title',
-                          inputhinttext: 'Mathematics',
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 10.0,
-                      ),
-                      const Text(
-                        'Tap to edit',
-                        style: ktapToEditStyle,
-                      ),
-                      const SizedBox(
-                        height: 10.0,
-                      ),
-                      const SizedBox(
-                        height: 1.0,
-                        width: 150.0,
-                        child: Divider(
-                          thickness: 0.5,
-                          color: Colors.white30,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 10.0,
-                      ),
-                      InkWell(
-                        onTap: () {
-                          selectStartTime();
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                            left: 15.0,
-                            right: 15.0,
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Text(
-                                'Start Time: ',
-                                style: kcardTextStyle,
+          return StatefulBuilder(
+            builder: (context, setState) => GestureDetector(
+              onTap: () {
+                FocusScope.of(context).unfocus();
+              },
+              child: SingleChildScrollView(
+                child: AnimatedPadding(
+                  padding: MediaQuery.of(context).viewInsets,
+                  duration: const Duration(milliseconds: 100),
+                  curve: Curves.decelerate,
+                  child: Container(
+                    color: mybackgroundPurple,
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                          left: 20.0, right: 20.0, top: 20.0, bottom: 40.0),
+                      child: Form(
+                        // key: ,
+                        child: Column(
+                          children: [
+                            TextFormField(
+                              controller: lessonController,
+                              autofocus: false,
+                              keyboardType: TextInputType.name,
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return ("Title cannot be empty!");
+                                }
+                                return null;
+                              },
+                              onSaved: (value) {
+                                lessonController.text = value!;
+                              },
+                              textInputAction: TextInputAction.next,
+                              style: kparagrapghStyle,
+                              decoration: tFieldInputDecoration(
+                                inputlabeltext: 'Lesson/Title',
+                                inputhinttext: 'Mathematics',
                               ),
-                              Text(
-                                '${_timeOfDay.hour.toString()}'
-                                ':'
-                                '${_timeOfDay.minute.toString()}',
-                                style: kbottomSheetDigit,
+                            ),
+                            const SizedBox(
+                              height: 10.0,
+                            ),
+                            const Text(
+                              'Tap to edit',
+                              style: ktapToEditStyle,
+                            ),
+                            const SizedBox(
+                              height: 10.0,
+                            ),
+                            const SizedBox(
+                              height: 1.0,
+                              width: 150.0,
+                              child: Divider(
+                                thickness: 0.5,
+                                color: Colors.white30,
                               ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 10.0,
-                      ),
-                      SizedBox(
-                        height: 1.0,
-                        width: MediaQuery.of(context).size.width * 0.77777,
-                        child: const Divider(
-                          thickness: 0.5,
-                          color: Colors.white30,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 10.0,
-                      ),
-                      InkWell(
-                        onTap: () {
-                          selectStopTime();
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                            left: 15.0,
-                            right: 15.0,
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Text(
-                                'Stop Time: ',
-                                style: kcardTextStyle,
+                            ),
+                            const SizedBox(
+                              height: 10.0,
+                            ),
+                            InkWell(
+                              onTap: () async {
+                                startTime =
+                                    await selectStartTime(context, startTime);
+                                setState(() {});
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                  left: 15.0,
+                                  right: 15.0,
+                                ),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    const Text(
+                                      'Start Time: ',
+                                      style: kcardTextStyle,
+                                    ),
+                                    Text(
+                                      '${startTime?.hour.toString() ?? _timeOfDay.hour.toString()}'
+                                      ':'
+                                      '${startTime?.minute.toString() ?? _timeOfDay.minute.toString()}',
+                                      style: kbottomSheetDigit,
+                                    ),
+                                  ],
+                                ),
                               ),
-                              Text(
-                                '${_endTimeNow.hour.toString()}'
-                                ':'
-                                '${_endTimeNow.minute.toString()}',
-                                style: kbottomSheetDigit,
+                            ),
+                            const SizedBox(
+                              height: 10.0,
+                            ),
+                            SizedBox(
+                              height: 1.0,
+                              width:
+                                  MediaQuery.of(context).size.width * 0.77777,
+                              child: const Divider(
+                                thickness: 0.5,
+                                color: Colors.white30,
                               ),
-                            ],
-                          ),
+                            ),
+                            const SizedBox(
+                              height: 10.0,
+                            ),
+                            InkWell(
+                              onTap: () async {
+                                stopTime =
+                                    await selectStopTime(context, stopTime);
+                                setState(() {});
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                  left: 15.0,
+                                  right: 15.0,
+                                ),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    const Text(
+                                      'Stop Time: ',
+                                      style: kcardTextStyle,
+                                    ),
+                                    Text(
+                                      '${stopTime?.hour.toString() ?? _endTimeNow.hour.toString()}'
+                                      ':'
+                                      '${stopTime?.minute.toString() ?? _endTimeNow.minute.toString()}',
+                                      style: kbottomSheetDigit,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10.0,
+                            ),
+                            SizedBox(
+                              height: 1.0,
+                              width:
+                                  MediaQuery.of(context).size.width * 0.77777,
+                              child: const Divider(
+                                thickness: 0.5,
+                                color: Colors.white30,
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 10.0,
+                            ),
+                            ButtonWidget(
+                              text: 'ADD',
+                              onClicked: () {
+                                // startTimer();
+                                // startisPressed = !startisPressed;
+                              },
+                              foregroundColor: Colors.white,
+                              backgroundColor: mypink,
+                            ),
+                          ],
                         ),
                       ),
-                      const SizedBox(
-                        height: 10.0,
-                      ),
-                      SizedBox(
-                        height: 1.0,
-                        width: MediaQuery.of(context).size.width * 0.77777,
-                        child: const Divider(
-                          thickness: 0.5,
-                          color: Colors.white30,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 10.0,
-                      ),
-                      ButtonWidget(
-                        text: 'ADD',
-                        onClicked: () {
-                          // startTimer();
-                          // startisPressed = !startisPressed;
-                        },
-                        foregroundColor: Colors.white,
-                        backgroundColor: mypink,
-                      ),
-                    ],
+                    ),
                   ),
                 ),
               ),
@@ -327,25 +350,36 @@ class _TimeTableState extends State<TimeTable> {
         });
   }
 
-  Future<void> selectStartTime() async {
-    _startTime =
-        await showTimePicker(context: context, initialTime: _timeOfDay);
-    if (_startTime != null) {
-      setState(() {
-        _timeOfDay = _startTime!;
-      });
-    }
+  // Future<void> selectStartTime() async {
+  //   _startTime =
+  //       await showTimePicker(context: context, initialTime: _timeOfDay);
+  //   if (_startTime != null) {
+  //     setState(() {
+  //       _timeOfDay = _startTime!;
+  //     });
+  //   }
+  // }
+  Future<TimeOfDay?> selectStartTime(
+      BuildContext context, TimeOfDay? initialTime) async {
+    return showTimePicker(
+        context: context, initialTime: initialTime ?? _timeOfDay);
   }
 
-  Future<void> selectStopTime() async {
-    _stopTime =
-        await showTimePicker(context: context, initialTime: _endTimeNow);
-    if (_stopTime != null) {
-      setState(() {
-        _endTimeNow = _stopTime!;
-      });
-    }
+  Future<TimeOfDay?> selectStopTime(
+      BuildContext context, TimeOfDay? initialTime) async {
+    return showTimePicker(
+        context: context, initialTime: initialTime ?? _endTimeNow);
   }
+
+  // Future<void> selectStopTime() async {
+  //   _stopTime =
+  //       await showTimePicker(context: context, initialTime: _endTimeNow);
+  //   if (_stopTime != null) {
+  //     setState(() {
+  //       _endTimeNow = _stopTime!;
+  //     });
+  //   }
+  // }
 }
 
 List<String> _daysOftheWeek = [
