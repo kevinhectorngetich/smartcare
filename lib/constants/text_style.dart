@@ -108,3 +108,29 @@ const ktimeTimeTableTimeText = TextStyle(
   color: Colors.white,
   fontWeight: FontWeight.w300,
 );
+//? TIMETABLE
+
+const kCaptionStyle = TextStyle(
+  fontFamily: 'Poppins',
+  fontSize: 15.0,
+  fontWeight: FontWeight.w400,
+  color: Colors.white,
+);
+const kPlaceholderStyle = TextStyle(
+  fontFamily: 'Poppins',
+  fontSize: 13.0,
+  fontWeight: FontWeight.w400,
+  color: Colors.white24,
+);
+const kbottomSheetDigit = TextStyle(
+  fontFamily: 'Poppins',
+  fontSize: 23.0,
+  color: Colors.white,
+  fontWeight: FontWeight.bold,
+);
+const ktapToEditStyle = TextStyle(
+  fontFamily: 'Poppins',
+  fontSize: 15.0,
+  color: Colors.white,
+  fontWeight: FontWeight.w400,
+);

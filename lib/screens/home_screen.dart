@@ -31,7 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: screens[currentIndex],
       bottomNavigationBar: NavigationBarTheme(
         data: NavigationBarThemeData(
-          indicatorColor: mybackgroundPurple,
+          indicatorColor: myContainerLightpurple,
           labelTextStyle: MaterialStateProperty.all(kparagrapghStyle),
           // indicatorColor: ,
         ),
