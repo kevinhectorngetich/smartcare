@@ -201,7 +201,7 @@ class _ChartScreenState extends State<ChartScreen> {
                   height: paddingHeight,
                 ),
                 const Text(
-                  'The total amount of tme spent using the phone',
+                  'The total amount of time spent using the phone',
                   style: kpageBodyStyle,
                 ),
                 SizedBox(
