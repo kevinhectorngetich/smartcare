@@ -28,6 +28,13 @@ class _TimeTableState extends State<TimeTable> {
   final lessonController = TextEditingController();
   var selectedDayOfWeek = 'Monday';
 
+  void _addLesson(Lesson lesson) {
+    setState(() {
+      // update the state with the new lesson
+      //? Just my callback
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     double paddingHeight = MediaQuery.of(context).size.height * 0.05;
@@ -89,91 +96,112 @@ class _TimeTableState extends State<TimeTable> {
                 height: paddingHeight,
               ),
               Expanded(
-                child: ListView.builder(
-                    itemCount: _classes.length + 1,
-                    // physics: const NeverScrollableScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      if (index < _classes.length) {
-                        return SizedBox(
-                          // height: 150.0,
-                          child: Padding(
-                            padding: const EdgeInsets.only(bottom: 20.0),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  color: cardColors[index],
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(10.0))),
-                              child: Padding(
-                                padding: const EdgeInsets.only(
-                                    top: 20.0,
-                                    left: 20.0,
-                                    bottom: 20.0,
-                                    right: 20.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      _lessons[index],
-                                      style: ktimeTableLesson,
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              const SizedBox(
-                                                height: 20.0,
-                                              ),
-                                              const Text(
-                                                'Time:',
-                                                style: ktimeTimeTableTimeText,
-                                              ),
-                                              const SizedBox(
-                                                height: 5.0,
-                                              ),
-                                              Text(_time[index],
-                                                  style: ktimeTableLesson),
-                                            ]),
-                                        SizedBox(
-                                          height: 65.0,
-                                          width: 65.0,
-                                          child: Image.asset(
-                                            imagesPath[
-                                                index % imagesPath.length],
-                                          ),
+                child: FutureBuilder(
+                    future: service.getLessons(selectedDayOfWeek),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        List<Lesson> lessons = snapshot.data as List<Lesson>;
+                        return ListView.builder(
+                            //? Counting from lessons
+                            itemCount: lessons.length + 1,
+                            // physics: const NeverScrollableScrollPhysics(),
+                            itemBuilder: (context, index) {
+                              if (index < lessons.length) {
+                                Lesson lesson = lessons[index];
+                                return SizedBox(
+                                  // height: 150.0,
+                                  child: Padding(
+                                    padding:
+                                        const EdgeInsets.only(bottom: 20.0),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          color: cardColors[index],
+                                          borderRadius: const BorderRadius.all(
+                                              Radius.circular(10.0))),
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(
+                                            top: 20.0,
+                                            left: 20.0,
+                                            bottom: 20.0,
+                                            right: 20.0),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              lesson.title,
+                                              style: ktimeTableLesson,
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      const SizedBox(
+                                                        height: 20.0,
+                                                      ),
+                                                      const Text(
+                                                        'Time:',
+                                                        style:
+                                                            ktimeTimeTableTimeText,
+                                                      ),
+                                                      const SizedBox(
+                                                        height: 5.0,
+                                                      ),
+                                                      //? START ABD END TIME
+                                                      Text(
+                                                          '${DateFormat('hh:mm a').format(DateTime.parse(lesson.startTime.toIso8601String()))} - ${DateFormat('hh:mm a').format(DateTime.parse(lesson.endTime.toIso8601String()))}',
+                                                          style:
+                                                              ktimeTableLesson),
+                                                    ]),
+                                                SizedBox(
+                                                  height: 65.0,
+                                                  width: 65.0,
+                                                  child: Image.asset(
+                                                    imagesPath[index %
+                                                        imagesPath.length],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
                                         ),
-                                      ],
+                                      ),
                                     ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        );
+                                  ),
+                                );
+                              } else {
+                                return InkWell(
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(10.0),
+                                  ),
+                                  onTap: () {
+                                    _showModalBottomSheet(context, _addLesson);
+                                  },
+                                  child: Container(
+                                    height: 140.0,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.white),
+                                      borderRadius: const BorderRadius.all(
+                                        Radius.circular(10.0),
+                                      ),
+                                    ),
+                                    child: Center(
+                                      child: Image.asset(
+                                          'assets/images/add-button.png'),
+                                    ),
+                                  ),
+                                );
+                              }
+                            });
                       } else {
-                        return InkWell(
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(10.0),
-                          ),
-                          onTap: () {
-                            _showModalBottomSheet(context);
-                          },
-                          child: Container(
-                            height: 140.0,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.white),
-                              borderRadius: const BorderRadius.all(
-                                Radius.circular(10.0),
-                              ),
-                            ),
-                            child: Center(
-                              child:
-                                  Image.asset('assets/images/add-button.png'),
-                            ),
-                          ),
+                        return const Center(
+                          child: CircularProgressIndicator(),
                         );
                       }
                     }),
@@ -185,7 +213,10 @@ class _TimeTableState extends State<TimeTable> {
     );
   }
 
-  void _showModalBottomSheet(BuildContext context) {
+  void _showModalBottomSheet(
+    BuildContext context,
+    Function(Lesson) addLesson,
+  ) {
     TimeOfDay? startTime;
     TimeOfDay? stopTime;
     final _formKey = GlobalKey<FormState>();
@@ -352,11 +383,10 @@ class _TimeTableState extends State<TimeTable> {
                             const SizedBox(
                               height: 10.0,
                             ),
+                            //? ADD to isar DB
                             ButtonWidget(
                               text: 'ADD',
                               onClicked: () {
-                                print('------THis is what to do------');
-                                print(selectedDayOfWeek);
                                 if (_formKey.currentState!.validate()) {
                                   service.saveCourse(Lesson()
                                     ..title = lessonController.text
@@ -375,8 +405,19 @@ class _TimeTableState extends State<TimeTable> {
                                       _endTimeNow.minute,
                                     )
                                     ..dayOfWeek = selectedDayOfWeek);
+                                  // .then((_) => setState(() {
+                                  //       // Refresh your ListView.builder here
+                                  //       service
+                                  //           .getLessons(selectedDayOfWeek);
+                                  //     }));
+                                  // service.getLessons(selectedDayOfWeek);
+                                  //? Using Callback For Now
+                                  addLesson(Lesson());
+
                                   ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
+                                          backgroundColor:
+                                              myContainerLightpurple,
                                           content: Text(
                                               "New course '${lessonController.text}' saved in DB")));
 
