@@ -1,24 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:smartcare/constants/constants.dart';
+import 'package:smartcare/models/entities/lesson.dart';
 
 import '../constants/input_decorations.dart';
 import '../constants/text_style.dart';
+import '../services/isar_service.dart';
 import '../widgets/button_widget.dart';
 
 class TimeTable extends StatefulWidget {
-  const TimeTable({super.key});
+  // final IsarService service;
+
+  const TimeTable({
+    super.key,
+  });
 
   @override
   State<TimeTable> createState() => _TimeTableState();
 }
 
 class _TimeTableState extends State<TimeTable> {
+  IsarService service = IsarService();
   TimeOfDay _timeOfDay = TimeOfDay.now();
   TimeOfDay _endTimeNow = TimeOfDay.now();
   TimeOfDay? _startTime;
   TimeOfDay? _stopTime;
   final lessonController = TextEditingController();
+  var selectedDayOfWeek = 'Monday';
 
   @override
   Widget build(BuildContext context) {
@@ -56,6 +64,7 @@ class _TimeTableState extends State<TimeTable> {
                         onTap: () {
                           setState(() {
                             selectedDateIndex = index;
+                            selectedDayOfWeek = isarDaysOftheWeek[index];
                           });
                         },
                         child: Container(
@@ -179,6 +188,8 @@ class _TimeTableState extends State<TimeTable> {
   void _showModalBottomSheet(BuildContext context) {
     TimeOfDay? startTime;
     TimeOfDay? stopTime;
+    final _formKey = GlobalKey<FormState>();
+
     showModalBottomSheet(
         context: context,
         builder: (context) {
@@ -198,7 +209,7 @@ class _TimeTableState extends State<TimeTable> {
                       padding: const EdgeInsets.only(
                           left: 20.0, right: 20.0, top: 20.0, bottom: 40.0),
                       child: Form(
-                        // key: ,
+                        key: _formKey,
                         child: Column(
                           children: [
                             TextFormField(
@@ -344,6 +355,34 @@ class _TimeTableState extends State<TimeTable> {
                             ButtonWidget(
                               text: 'ADD',
                               onClicked: () {
+                                print('------THis is what to do------');
+                                print(selectedDayOfWeek);
+                                if (_formKey.currentState!.validate()) {
+                                  service.saveCourse(Lesson()
+                                    ..title = lessonController.text
+                                    ..startTime = DateTime(
+                                      DateTime.now().year,
+                                      DateTime.now().month,
+                                      DateTime.now().day,
+                                      _timeOfDay.hour,
+                                      _timeOfDay.minute,
+                                    )
+                                    ..endTime = DateTime(
+                                      DateTime.now().year,
+                                      DateTime.now().month,
+                                      DateTime.now().day,
+                                      _endTimeNow.hour,
+                                      _endTimeNow.minute,
+                                    )
+                                    ..dayOfWeek = selectedDayOfWeek);
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                          content: Text(
+                                              "New course '${lessonController.text}' saved in DB")));
+
+                                  Navigator.pop(context);
+                                }
+
                                 // startTimer();
                                 // startisPressed = !startisPressed;
                               },
@@ -381,6 +420,13 @@ List<String> _daysOftheWeek = [
   'Wed',
   'Thur',
   'Fri',
+];
+List<String> isarDaysOftheWeek = [
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
 ];
 
 Map<String, String> _classes = {
