@@ -13,6 +13,23 @@ class IsarService {
     isar.writeTxnSync<int>(() => isar.lessons.putSync(newLesson));
   }
 
+  Future<void> deleteLesson(Lesson newLesson) async {
+    final isar = await db;
+
+    final success =
+        await isar.writeTxn<bool>(() => isar.lessons.delete(newLesson.id));
+    print('Recipe deleted: $success');
+  }
+  // Future<void> deleteLesson(Lesson newLesson) async {
+  //   final isar = await db;
+
+  //   await isar.writeTxn((isar) async {
+  //     final success = await isar.lessons.delete(newLesson.id);
+  //     print('Recipe deleted: $success');
+  //     return null; // add a return statement to fix the error
+  //   });
+  // }
+
   Future<List<Lesson>> getLessons(String dayOfWeek) async {
     final isar = await db;
     return await isar.lessons.filter().dayOfWeekEqualTo(dayOfWeek).findAll();

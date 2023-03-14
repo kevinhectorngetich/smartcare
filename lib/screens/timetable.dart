@@ -111,68 +111,86 @@ class _TimeTableState extends State<TimeTable> {
                             itemBuilder: (context, index) {
                               if (index < lessons.length) {
                                 Lesson lesson = lessons[index];
-                                return SizedBox(
-                                  // height: 150.0,
-                                  child: Padding(
-                                    padding:
-                                        const EdgeInsets.only(bottom: 20.0),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                          color: cardColors[index],
-                                          borderRadius: const BorderRadius.all(
-                                              Radius.circular(10.0))),
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(
-                                            top: 20.0,
-                                            left: 20.0,
-                                            bottom: 20.0,
-                                            right: 20.0),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              lesson.title,
-                                              style: ktimeTableLesson,
-                                            ),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      const SizedBox(
-                                                        height: 20.0,
-                                                      ),
-                                                      const Text(
-                                                        'Time:',
-                                                        style:
-                                                            ktimeTimeTableTimeText,
-                                                      ),
-                                                      const SizedBox(
-                                                        height: 5.0,
-                                                      ),
-                                                      //? START ABD END TIME
-                                                      Text(
-                                                          '${DateFormat('hh:mm a').format(DateTime.parse(lesson.startTime.toIso8601String()))} - ${DateFormat('hh:mm a').format(DateTime.parse(lesson.endTime.toIso8601String()))}',
+                                return Dismissible(
+                                  key: Key(lesson.id.toString()),
+                                  onDismissed: (direction) async {
+                                    await service.deleteLesson(lesson).then(
+                                        (_) => ScaffoldMessenger.of(context)
+                                            .showSnackBar(SnackBar(
+                                                backgroundColor:
+                                                    myContainerLightpurple,
+                                                content: Text(
+                                                    '${lesson.title} removed from db'))));
+
+                                    setState(() {
+                                      //remove it from the fetched list NICE!!
+                                      lessons.removeAt(index);
+                                    });
+                                  },
+                                  child: SizedBox(
+                                    // height: 150.0,
+                                    child: Padding(
+                                      padding:
+                                          const EdgeInsets.only(bottom: 20.0),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            color: cardColors[index],
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                                    Radius.circular(10.0))),
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                              top: 20.0,
+                                              left: 20.0,
+                                              bottom: 20.0,
+                                              right: 20.0),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                lesson.title,
+                                                style: ktimeTableLesson,
+                                              ),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        const SizedBox(
+                                                          height: 20.0,
+                                                        ),
+                                                        const Text(
+                                                          'Time:',
                                                           style:
-                                                              ktimeTableLesson),
-                                                    ]),
-                                                SizedBox(
-                                                  height: 65.0,
-                                                  width: 65.0,
-                                                  child: Image.asset(
-                                                    imagesPath[index %
-                                                        imagesPath.length],
+                                                              ktimeTimeTableTimeText,
+                                                        ),
+                                                        const SizedBox(
+                                                          height: 5.0,
+                                                        ),
+                                                        //? START ABD END TIME
+                                                        Text(
+                                                            '${DateFormat('hh:mm a').format(DateTime.parse(lesson.startTime.toIso8601String()))} - ${DateFormat('hh:mm a').format(DateTime.parse(lesson.endTime.toIso8601String()))}',
+                                                            style:
+                                                                ktimeTableLesson),
+                                                      ]),
+                                                  SizedBox(
+                                                    height: 65.0,
+                                                    width: 65.0,
+                                                    child: Image.asset(
+                                                      imagesPath[index %
+                                                          imagesPath.length],
+                                                    ),
                                                   ),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
+                                                ],
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -483,7 +501,7 @@ var _time = _classes.values.toList();
 List<Color> cardColors = [
   const Color(0xff7F86FF),
   const Color(0xffFFB757),
-  const Color(0xffFF5B47),
+  const Color(0xff6ABAFF),
   const Color(0xffFF4171),
   const Color(0xff49B583),
 ];
