@@ -27,6 +27,7 @@ class _TimeTableState extends State<TimeTable> {
   TimeOfDay? _stopTime;
   final lessonController = TextEditingController();
   var selectedDayOfWeek = 'Monday';
+  int selectedDateIndex = 0;
 
   void _addLesson(Lesson lesson) {
     setState(() {
@@ -38,7 +39,6 @@ class _TimeTableState extends State<TimeTable> {
   @override
   Widget build(BuildContext context) {
     double paddingHeight = MediaQuery.of(context).size.height * 0.05;
-    int selectedDateIndex = 0;
 
     return Scaffold(
       body: SafeArea(
@@ -68,6 +68,9 @@ class _TimeTableState extends State<TimeTable> {
                     itemCount: _daysOftheWeek.length,
                     itemBuilder: (builder, index) {
                       return InkWell(
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(10.0),
+                        ),
                         onTap: () {
                           setState(() {
                             selectedDateIndex = index;
