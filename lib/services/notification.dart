@@ -12,6 +12,9 @@ Future<void> initializeNotifications() async {
   await flutterLocalNotificationsPlugin.initialize(initializationSettings);
 }
 
+// TODO: Modify the messages to different activities for different time
+// TODO: Show notifications only twice for an app:
+
 void showNotification(String appLabel) async {
   const AndroidNotificationDetails androidPlatformChannelSpecifics =
       AndroidNotificationDetails(

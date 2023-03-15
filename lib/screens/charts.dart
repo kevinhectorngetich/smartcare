@@ -1,4 +1,3 @@
-import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
 import 'package:app_usage/app_usage.dart';
 import 'package:device_apps/device_apps.dart';
 import 'package:fl_chart/fl_chart.dart';
@@ -7,9 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:smartcare/constants/constants.dart';
 import 'package:smartcare/constants/text_style.dart';
-import 'package:smartcare/models/bar_data.dart';
 import 'package:smartcare/services/notification.dart';
-import 'package:usage_stats/usage_stats.dart';
 import 'package:intl/intl.dart';
 
 class ChartScreen extends StatefulWidget {

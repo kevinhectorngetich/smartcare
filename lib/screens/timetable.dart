@@ -22,10 +22,9 @@ class TimeTable extends StatefulWidget {
 
 class _TimeTableState extends State<TimeTable> {
   IsarService service = IsarService();
-  TimeOfDay _timeOfDay = TimeOfDay.now();
-  TimeOfDay _endTimeNow = TimeOfDay.now();
-  TimeOfDay? _startTime;
-  TimeOfDay? _stopTime;
+  final TimeOfDay _timeOfDay = TimeOfDay.now();
+  final TimeOfDay _endTimeNow = TimeOfDay.now();
+
   final lessonController = TextEditingController();
   var selectedDayOfWeek = 'Monday';
   int selectedDateIndex = 0;
@@ -40,10 +39,6 @@ class _TimeTableState extends State<TimeTable> {
   @override
   Widget build(BuildContext context) {
     double paddingHeight = MediaQuery.of(context).size.height * 0.05;
-
-    //TODO:Check whether to use awesome notifications to schedule alarms
-    //TODO:5-7.30 try to study each package:
-    // TODO: try to implement it during the day and complete the project and start docs ASAP
 
     return Scaffold(
       body: SafeArea(
@@ -116,6 +111,20 @@ class _TimeTableState extends State<TimeTable> {
                             itemBuilder: (context, index) {
                               if (index < lessons.length) {
                                 Lesson lesson = lessons[index];
+                                //? Schedule notifications recieved from DB
+                                scheduleNotification(
+                                  // DateTime(
+                                  //   DateTime.now().year,
+                                  //   DateTime.now().month,
+                                  //   DateTime.now().day,
+                                  //   startTime?.hour ?? _timeOfDay.hour,
+                                  //   startTime?.minute ?? _timeOfDay.minute,
+                                  // ),
+                                  lesson.startTime,
+                                  selectedDayOfWeek,
+                                  lessonController.text,
+                                  lesson.id,
+                                );
 
                                 return Dismissible(
                                   key: Key(lesson.id.toString()),
@@ -434,17 +443,7 @@ class _TimeTableState extends State<TimeTable> {
                                       stopTime?.minute ?? _endTimeNow.minute,
                                     )
                                     ..dayOfWeek = selectedDayOfWeek);
-                                  scheduleNotification(
-                                    DateTime(
-                                      DateTime.now().year,
-                                      DateTime.now().month,
-                                      DateTime.now().day,
-                                      startTime?.hour ?? _timeOfDay.hour,
-                                      startTime?.minute ?? _timeOfDay.minute,
-                                    ),
-                                    selectedDayOfWeek,
-                                    lessonController.text,
-                                  );
+
                                   // .then((_) => setState(() {
                                   //       // Refresh your ListView.builder here
                                   //       service
@@ -530,8 +529,8 @@ List<String> imagesPath = [
   'assets/images/book.png',
 ];
 
-void scheduleNotification(
-    DateTime startTime, String dayOfWeek, String lessonName) async {
+void scheduleNotification(DateTime startTime, String dayOfWeek,
+    String lessonName, int notificationID) async {
   // Get the day of the week as an integer (Monday = 1, Tuesday = 2, etc.)
   // int dayOfWeekIndex = DateTime.parse("2023-03-15").weekday;
   int dayOfWeekIndex = DateTime.now().weekday;
@@ -545,7 +544,7 @@ void scheduleNotification(
   // Create a notification that repeats every week on the same day and time
   await AwesomeNotifications().createNotification(
     content: NotificationContent(
-      id: 10,
+      id: notificationID,
       channelKey: 'basic_channel',
       title: 'Lesson Reminder',
       body: 'Your $lessonName lesson is starting soon!',
