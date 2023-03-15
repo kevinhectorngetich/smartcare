@@ -1,6 +1,7 @@
 import 'dart:isolate';
 
 import 'package:android_alarm_manager_plus/android_alarm_manager_plus.dart';
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:smartcare/common/theme.dart';
 import 'package:smartcare/screens/home_screen.dart';
@@ -13,10 +14,37 @@ void main() async {
   // await FlutterBackground.initialize();
   // await FlutterBackground.enableBackgroundExecution();
   print('Initializing notifications...');
+  await AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
+    if (!isAllowed) {
+      // This is just a basic example. For real apps, you must show some
+      // friendly dialog box before call the request method.
+      // This is very important to not harm the user experience
+      AwesomeNotifications().requestPermissionToSendNotifications();
+    }
+  });
 
   await initializeNotifications();
   await AndroidAlarmManager.initialize();
   print('Scheduling periodic alarm with AndroidAlarmManager...');
+  AwesomeNotifications().initialize(
+      // set the icon to null if you want to use the default app icon
+      'resource://drawable/ic_launcher',
+      [
+        NotificationChannel(
+            channelGroupKey: 'basic_channel_group',
+            channelKey: 'basic_channel',
+            channelName: 'Basic notifications',
+            channelDescription: 'Notification channel for basic tests',
+            importance: NotificationImportance.High,
+            channelShowBadge: true,
+            playSound: true,
+            enableVibration: true,
+            defaultColor: Color(0xFF9D50DD),
+            ledColor: Colors.white)
+      ],
+      // Channel groups are only visual and are not required
+
+      debug: true);
 
   runApp(const MyApp());
   await AndroidAlarmManager.periodic(

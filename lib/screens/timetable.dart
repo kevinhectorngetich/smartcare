@@ -1,3 +1,4 @@
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:smartcare/constants/constants.dart';
@@ -39,6 +40,10 @@ class _TimeTableState extends State<TimeTable> {
   @override
   Widget build(BuildContext context) {
     double paddingHeight = MediaQuery.of(context).size.height * 0.05;
+
+    //TODO:Check whether to use awesome notifications to schedule alarms
+    //TODO:5-7.30 try to study each package:
+    // TODO: try to implement it during the day and complete the project and start docs ASAP
 
     return Scaffold(
       body: SafeArea(
@@ -111,6 +116,7 @@ class _TimeTableState extends State<TimeTable> {
                             itemBuilder: (context, index) {
                               if (index < lessons.length) {
                                 Lesson lesson = lessons[index];
+
                                 return Dismissible(
                                   key: Key(lesson.id.toString()),
                                   onDismissed: (direction) async {
@@ -121,6 +127,7 @@ class _TimeTableState extends State<TimeTable> {
                                                     myContainerLightpurple,
                                                 content: Text(
                                                     '${lesson.title} removed from db'))));
+                                    cancelNotification(10);
 
                                     setState(() {
                                       //remove it from the fetched list NICE!!
@@ -134,7 +141,8 @@ class _TimeTableState extends State<TimeTable> {
                                           const EdgeInsets.only(bottom: 20.0),
                                       child: Container(
                                         decoration: BoxDecoration(
-                                            color: cardColors[index],
+                                            color: cardColors[
+                                                index % cardColors.length],
                                             borderRadius:
                                                 const BorderRadius.all(
                                                     Radius.circular(10.0))),
@@ -175,7 +183,7 @@ class _TimeTableState extends State<TimeTable> {
                                                         ),
                                                         //? START ABD END TIME
                                                         Text(
-                                                            '${DateFormat('hh:mm a').format(DateTime.parse(lesson.startTime.toIso8601String()))} - ${DateFormat('hh:mm a').format(DateTime.parse(lesson.endTime.toIso8601String()))}',
+                                                            '''${DateFormat('hh:mm a').format(DateTime.parse(lesson.startTime.toIso8601String()))} - ${DateFormat('hh:mm a').format(DateTime.parse(lesson.endTime.toIso8601String()))}''',
                                                             style:
                                                                 ktimeTableLesson),
                                                       ]),
@@ -415,17 +423,28 @@ class _TimeTableState extends State<TimeTable> {
                                       DateTime.now().year,
                                       DateTime.now().month,
                                       DateTime.now().day,
-                                      _timeOfDay.hour,
-                                      _timeOfDay.minute,
+                                      startTime?.hour ?? _timeOfDay.hour,
+                                      startTime?.minute ?? _timeOfDay.minute,
                                     )
                                     ..endTime = DateTime(
                                       DateTime.now().year,
                                       DateTime.now().month,
                                       DateTime.now().day,
-                                      _endTimeNow.hour,
-                                      _endTimeNow.minute,
+                                      stopTime?.hour ?? _endTimeNow.hour,
+                                      stopTime?.minute ?? _endTimeNow.minute,
                                     )
                                     ..dayOfWeek = selectedDayOfWeek);
+                                  scheduleNotification(
+                                    DateTime(
+                                      DateTime.now().year,
+                                      DateTime.now().month,
+                                      DateTime.now().day,
+                                      startTime?.hour ?? _timeOfDay.hour,
+                                      startTime?.minute ?? _timeOfDay.minute,
+                                    ),
+                                    selectedDayOfWeek,
+                                    lessonController.text,
+                                  );
                                   // .then((_) => setState(() {
                                   //       // Refresh your ListView.builder here
                                   //       service
@@ -441,7 +460,7 @@ class _TimeTableState extends State<TimeTable> {
                                               myContainerLightpurple,
                                           content: Text(
                                               "New course '${lessonController.text}' saved in DB")));
-
+                                  // createDummyNotification();
                                   Navigator.pop(context);
                                 }
 
@@ -510,3 +529,86 @@ List<String> imagesPath = [
   'assets/images/shelf.png',
   'assets/images/book.png',
 ];
+
+void scheduleNotification(
+    DateTime startTime, String dayOfWeek, String lessonName) async {
+  // Get the day of the week as an integer (Monday = 1, Tuesday = 2, etc.)
+  // int dayOfWeekIndex = DateTime.parse("2023-03-15").weekday;
+  int dayOfWeekIndex = DateTime.now().weekday;
+
+  // Calculate the difference between the input day of the week and the current day of the week
+  int daysToAdd = (dayOfWeekIndex - getDayOfWeekIndex(dayOfWeek) + 7) % 7;
+
+  // Calculate the date for the next occurrence of the lesson
+  DateTime nextLessonDate = startTime.add(Duration(days: daysToAdd));
+
+  // Create a notification that repeats every week on the same day and time
+  await AwesomeNotifications().createNotification(
+    content: NotificationContent(
+      id: 10,
+      channelKey: 'basic_channel',
+      title: 'Lesson Reminder',
+      body: 'Your $lessonName lesson is starting soon!',
+    ),
+    schedule: NotificationCalendar(
+      weekday: getDayOfWeekIndex(dayOfWeek),
+      hour: startTime.hour,
+      minute: startTime.minute,
+      second: 0,
+      millisecond: 0,
+      allowWhileIdle: false,
+      repeats: true,
+    ),
+  );
+}
+
+int getDayOfWeekIndex(String dayOfWeek) {
+  switch (dayOfWeek) {
+    case 'Monday':
+      return 1;
+    case 'Tuesday':
+      return 2;
+    case 'Wednesday':
+      return 3;
+    case 'Thursday':
+      return 4;
+    case 'Friday':
+      return 5;
+    default:
+      throw Exception('Invalid day of week');
+  }
+}
+
+void cancelAllNotifications() async {
+  await AwesomeNotifications().cancelAllSchedules();
+}
+
+void cancelNotification(int notificationId) async {
+  await AwesomeNotifications().cancel(notificationId);
+}
+
+// void createDummyNotification() async {
+//   await AwesomeNotifications().createNotification(
+//     content: NotificationContent(
+//       id: 1,
+//       channelKey: 'basic_channel',
+//       title: 'Lesson Reminder',
+//       body: 'Your lessonName lesson is starting soon!',
+//       // icon: 'resource://drawable/ic_launcher',
+//       // largeIcon: 'asset://assets/images/solar.png',
+//       // Replace with the path to your image file
+//     ),
+//     // actionButtons: [
+//     //   NotificationActionButton(
+//     //     key: 'action1',
+//     //     label: 'Open App',
+//     //     // autoCancel: true,
+//     //   ),
+//     //   NotificationActionButton(
+//     //     key: 'action2',
+//     //     label: 'Dismiss',
+//     //     // autoCancel: true,
+//     //   ),
+//     // ],
+//   );
+// }
