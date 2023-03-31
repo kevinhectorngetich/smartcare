@@ -136,7 +136,7 @@ class _TimeTableState extends State<TimeTable> {
                                                     myContainerLightpurple,
                                                 content: Text(
                                                     '${lesson.title} removed from db'))));
-                                    cancelNotification(10);
+                                    cancelNotification(lesson.id);
 
                                     setState(() {
                                       //remove it from the fetched list NICE!!
@@ -548,6 +548,7 @@ void scheduleNotification(DateTime startTime, String dayOfWeek,
       channelKey: 'basic_channel',
       title: 'Lesson Reminder',
       body: 'Your $lessonName lesson is starting soon!',
+      customSound: null,
     ),
     schedule: NotificationCalendar(
       weekday: getDayOfWeekIndex(dayOfWeek),

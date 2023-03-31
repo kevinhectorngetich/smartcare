@@ -77,11 +77,11 @@ class _PomodoroScreenState extends State<PomodoroScreen> {
     });
   }
 
-  @override
-  void dispose() {
-    timer?.cancel();
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   timer?.cancel();
+  //   super.dispose();
+  // }
 
   bool startisPressed = false;
 
