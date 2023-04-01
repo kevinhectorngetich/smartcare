@@ -1,4 +1,5 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:smartcare/constants/constants.dart';
@@ -9,6 +10,7 @@ import '../constants/text_style.dart';
 import '../services/isar_service.dart';
 import '../widgets/button_widget.dart';
 
+//TODO: START FROM TOP AND REFACTOR THE LIST TO MATCH:
 class TimeTable extends StatefulWidget {
   // final IsarService service;
 
@@ -24,10 +26,11 @@ class _TimeTableState extends State<TimeTable> {
   IsarService service = IsarService();
   final TimeOfDay _timeOfDay = TimeOfDay.now();
   final TimeOfDay _endTimeNow = TimeOfDay.now();
+  int? selectedDateIndex;
+  String? selectedDayOfWeek;
 
   final lessonController = TextEditingController();
-  var selectedDayOfWeek = 'Monday';
-  int selectedDateIndex = 0;
+  // var selectedDayOfWeek = 'Monday';
 
   void _addLesson(Lesson lesson) {
     setState(() {
@@ -36,8 +39,52 @@ class _TimeTableState extends State<TimeTable> {
     });
   }
 
+  String getDayOfWeekName(int dayOfWeekIndex) {
+    switch (dayOfWeekIndex) {
+      case 1:
+        return 'Monday';
+      case 2:
+        return 'Tuesday';
+      case 3:
+        return 'Wednesday';
+      case 4:
+        return 'Thursday';
+      case 5:
+        return 'Friday';
+      case 6:
+        return 'Saturday';
+      case 7:
+        return 'Sunday';
+      default:
+        throw Exception('Invalid day of week index');
+    }
+  }
+
+  @override
+  void initState() {
+    // Initialize the selectedDateIndex and selectedDayOfWeek variables
+    var now = DateTime.now();
+    selectedDateIndex = now.weekday - 1;
+    selectedDayOfWeek = getDayOfWeekName(now.weekday);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (selectedDayOfWeek == "Saturday" || selectedDayOfWeek == "Sunday") {
+        _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+      }
+    });
+
+    super.initState();
+  }
+
+  final ScrollController _scrollController = ScrollController();
+
   @override
   Widget build(BuildContext context) {
+    print('UUUUUUUUIIIIIIIIIIIII');
+    print(selectedDateIndex);
+    print(selectedDayOfWeek);
+
+// Function to convert weekday index to name
+
     double paddingHeight = MediaQuery.of(context).size.height * 0.05;
 
     return Scaffold(
@@ -64,6 +111,7 @@ class _TimeTableState extends State<TimeTable> {
               SizedBox(
                 height: 50.0,
                 child: ListView.builder(
+                    controller: _scrollController,
                     scrollDirection: Axis.horizontal,
                     itemCount: _daysOftheWeek.length,
                     itemBuilder: (builder, index) {
@@ -75,6 +123,19 @@ class _TimeTableState extends State<TimeTable> {
                           setState(() {
                             selectedDateIndex = index;
                             selectedDayOfWeek = isarDaysOftheWeek[index];
+                            if (selectedDateIndex == 0) {
+                              _scrollController.animateTo(
+                                _scrollController.position.minScrollExtent,
+                                duration: const Duration(milliseconds: 500),
+                                curve: Curves.easeInOut,
+                              );
+                            } else if (selectedDateIndex! >= 5) {
+                              _scrollController.animateTo(
+                                _scrollController.position.maxScrollExtent,
+                                duration: const Duration(milliseconds: 500),
+                                curve: Curves.easeInOut,
+                              );
+                            }
                           });
                         },
                         child: Container(
@@ -100,10 +161,13 @@ class _TimeTableState extends State<TimeTable> {
               ),
               Expanded(
                 child: FutureBuilder(
-                    future: service.getLessons(selectedDayOfWeek),
+                    future: service.getLessons(selectedDayOfWeek!),
                     builder: (context, snapshot) {
                       if (snapshot.hasData) {
                         List<Lesson> lessons = snapshot.data as List<Lesson>;
+                        // sort lessons by start time
+                        lessons
+                            .sort((a, b) => a.startTime.compareTo(b.startTime));
                         return ListView.builder(
                             //? Counting from lessons
                             itemCount: lessons.length + 1,
@@ -121,7 +185,7 @@ class _TimeTableState extends State<TimeTable> {
                                   //   startTime?.minute ?? _timeOfDay.minute,
                                   // ),
                                   lesson.startTime,
-                                  selectedDayOfWeek,
+                                  selectedDayOfWeek!,
                                   lessonController.text,
                                   lesson.id,
                                 );
@@ -219,7 +283,8 @@ class _TimeTableState extends State<TimeTable> {
                                     Radius.circular(10.0),
                                   ),
                                   onTap: () {
-                                    _showModalBottomSheet(context, _addLesson);
+                                    _showModalBottomSheet(context, _addLesson,
+                                        selectedDayOfWeek!);
                                   },
                                   child: Container(
                                     height: 140.0,
@@ -254,6 +319,7 @@ class _TimeTableState extends State<TimeTable> {
   void _showModalBottomSheet(
     BuildContext context,
     Function(Lesson) addLesson,
+    String selectedDayOfWeek,
   ) {
     TimeOfDay? startTime;
     TimeOfDay? stopTime;
@@ -500,6 +566,8 @@ List<String> _daysOftheWeek = [
   'Wed',
   'Thur',
   'Fri',
+  'Sat',
+  'Sun',
 ];
 List<String> isarDaysOftheWeek = [
   'Monday',
@@ -507,6 +575,8 @@ List<String> isarDaysOftheWeek = [
   'Wednesday',
   'Thursday',
   'Friday',
+  'Saturday',
+  'Sunday',
 ];
 
 Map<String, String> _classes = {
@@ -574,6 +644,10 @@ int getDayOfWeekIndex(String dayOfWeek) {
       return 4;
     case 'Friday':
       return 5;
+    case 'Saturday':
+      return 6;
+    case 'Sunday':
+      return 7;
     default:
       throw Exception('Invalid day of week');
   }
