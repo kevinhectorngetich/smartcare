@@ -1,10 +1,13 @@
 import 'dart:async';
 
+import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:flutter/material.dart';
 import 'package:rive/rive.dart';
 import 'package:smartcare/constants/constants.dart';
 import 'package:smartcare/constants/text_style.dart';
 import 'package:smartcare/widgets/button_widget.dart';
+
+// TODO: understand this section from top:
 
 class PomodoroScreen extends StatefulWidget {
   const PomodoroScreen({super.key});
@@ -25,10 +28,17 @@ class _PomodoroScreenState extends State<PomodoroScreen> {
   //   startTimer();
   // }
 
+  // void startTimer() {
+  //   timer = Timer.periodic(const Duration(seconds: 1), (_) {
+  //     return minusTime();
+  //   });
+  // }
   void startTimer() {
-    timer = Timer.periodic(const Duration(seconds: 1), (_) {
-      return minusTime();
-    });
+    if (timer == null || !timer!.isActive) {
+      timer = Timer.periodic(const Duration(seconds: 1), (_) {
+        return minusTime();
+      });
+    }
   }
 
   void reset() {
@@ -44,6 +54,14 @@ class _PomodoroScreenState extends State<PomodoroScreen> {
         timer?.cancel();
         reset();
         startisPressed = !startisPressed;
+        AwesomeNotifications().createNotification(
+          content: NotificationContent(
+            id: 3,
+            channelKey: 'basic_channel',
+            title: 'Pomodoro timer finished',
+            body: 'Great job, you completed a pomodoro session!',
+          ),
+        );
       } else {
         maxMinutes = Duration(seconds: seconds);
         _progressValue += 1 / 1500;

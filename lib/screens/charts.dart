@@ -14,45 +14,14 @@ class ChartScreen extends StatefulWidget {
   @override
   State<ChartScreen> createState() => _ChartScreenState();
 }
+// TODO: Remove the commented code
+// TODO: check on the notification icon
+// TODO: try to understand if you can add analysis to chart
 
 class _ChartScreenState extends State<ChartScreen> {
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
-  // SideTitles get _bottomTitles => SideTitles(
-  //       showTitles: true,
-  //       getTitlesWidget: (value, meta) {
-  //         String text = '';
-  //         switch (value.toInt()) {
-  //           case 0:
-  //             text = 'Sun';
-  //             break;
-  //           case 1:
-  //             text = 'Mon';
-  //             break;
-  //           case 2:
-  //             text = 'Tue';
-  //             break;
-  //           case 3:
-  //             text = 'Wed';
-  //             break;
-  //           case 4:
-  //             text = 'Thur';
-  //             break;
-  //           case 5:
-  //             text = 'Fri';
-  //             break;
-  //           case 6:
-  //             text = 'Sat';
-  //             break;
-  //         }
 
-  //         return Text(
-  //           text,
-  //           style: const TextStyle(
-  //               fontFamily: 'Poppins', color: Colors.white, fontSize: 10.0),
-  //         );
-  //       },
-  //     );
   SideTitles get _sideTitles => SideTitles(
         showTitles: true,
         interval: 6,
@@ -63,32 +32,7 @@ class _ChartScreenState extends State<ChartScreen> {
               fontFamily: 'Poppins', color: Colors.white, fontSize: 10.0),
         ),
       );
-  // AppUsage().getAppUsage(startDate, endDate);
-  // Future<List<AppUsageInfo>>? _infos;
-  // @override
-  // void initState() {
-  //   getUsageStats();
-  //   super.initState();
-  // }
 
-  // void getUsageStats() async {
-  //   try {
-  //     DateTime endDate = DateTime.now();
-  //     DateTime startDate = endDate.subtract(Duration(hours: 1));
-  //     List<AppUsageInfo> infoList =
-  //         await AppUsage().getAppUsage(startDate, endDate);
-  //     // setState(() => _infos = infoList);
-  //     print(infoList);
-  //     print('above------  above');
-
-  //     for (var info in infoList) {
-  //       print(info.toString());
-  //       // _infos.add()
-  //     }
-  //   } on AppUsageException catch (exception) {
-  //     print(exception);
-  //   }
-  // }
   Future<List<AppUsageInfo>>? _infos;
   Future<Map<String, int>?>? weekly;
   Map<String, int>? usageData;
@@ -111,28 +55,6 @@ class _ChartScreenState extends State<ChartScreen> {
     // printUsageStatsForWeek();
     // getAppUsageStats();
   }
-  //? Commented on 21 April
-
-  // Future<List<AppUsageInfo>> getUsageStats() async {
-  //   try {
-  //     DateTime now = DateTime.now();
-  //     DateTime start = DateTime(now.year, now.month, now.day);
-  //     DateTime end = DateTime.now();
-
-  //     List<AppUsageInfo> infoList = await AppUsage().getAppUsage(start, end);
-
-  //     // print(infoList);
-  //     var totalUsage = 0;
-  //     for (var info in infoList) {
-  //       totalUsage += info.usage.inHours;
-  //     }
-
-  //     return infoList;
-  //   } on AppUsageException catch (exception) {
-  //     print(exception);
-  //     return [];
-  //   }
-  // }
 
   final platform =
       const MethodChannel('com.kevinhectorngetich.smartcare/usage_stats');
@@ -143,31 +65,6 @@ class _ChartScreenState extends State<ChartScreen> {
         .invokeMapMethod<String, int>('getUsageStatsForWeek', args);
     return usageStatsMap;
   }
-
-  // void initAlarm() async {
-  //   await AndroidAlarmManager.periodic(
-  //     const Duration(minutes: 15),
-  //     0,
-  //     backgroundTask,
-  //     wakeup: true,
-  //     exact: true,
-  //     rescheduleOnReboot: true,
-  //     startAt: DateTime.now(),
-  //   );
-  // }
-  // void getWhatsAppUsageStats() {
-  //   platform.invokeMapMethod("getWhatsAppUsage");
-  // }
-
-  // Future<void> printUsageStatsForWeek() async {
-  //   final usageStatsMap = await getUsageStatsForWeek();
-  //   final formatter = DateFormat('EEEE');
-  //   final now = DateTime.now();
-  //   for (int i = 0; i < 7; i++) {
-  //     final day = formatter.format(now.add(Duration(days: i)));
-  //     final usageTime = usageStatsMap![day] ?? 0;
-  //   }
-  // }
 
   Future<Image> getAppIconMethod(String packageName) async {
     ApplicationWithIcon? app =
@@ -214,11 +111,6 @@ class _ChartScreenState extends State<ChartScreen> {
                       BarChartData(
                         borderData: FlBorderData(
                           show: false,
-
-                          // border: Border.all(
-                          //   style: BorderStyle.solid,
-                          //   color: Colors.white30,
-                          // ),
                         ),
                         maxY: 24,
                         groupsSpace: 12,
@@ -308,7 +200,7 @@ class _ChartScreenState extends State<ChartScreen> {
                   height: paddingHeight,
                 ),
                 Container(
-                  height: MediaQuery.of(context).size.height * 0.35,
+                  height: MediaQuery.of(context).size.height * 0.5,
                   decoration: const BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(20.0)),
                     color: myContainerLightpurple,
@@ -449,81 +341,3 @@ class _ChartScreenState extends State<ChartScreen> {
     );
   }
 }
-
-
-
-
-      // usageStatsList.forEach((UsageInfo usageStats) {
-      //   // DateTime usageTime = DateTime.parse(usageStats.lastTimeUsed!).toLocal();
-      //   String dateString = usageStats.lastTimeUsed!;
-      //   print('```````````AWOOOOOO```````````');
-      //   print(dateString);
-      //   DateTime usageTime =
-      //       DateFormat("yyyy-MM-dd HH:mm:ss").parse(dateString).toLocal();
-
-      //   // DateTime usageTime = DateTime.fromMillisecondsSinceEpoch(
-      //   //     usageStats.lastTimeUsed!.inMillisecondsSinceEpoch);
-
-      //   if (usageTime.weekday >= 1 && usageTime.weekday <= 7) {
-      //     usageStatsByDay[usageTime.weekday - 1]!.add(usageStats);
-      //   }
-
-      //? For Loop for days
-      
-      // for (int i = 1; i <= 7; i++) {
-      //   // change loop range to include all days
-      //   List<UsageInfo> usageStatsForDay = usageStatsByDay[i]!;
-      //   Duration totalDuration = Duration.zero;
-
-      //   for (UsageInfo usageStats in usageStatsList) {
-      //     // print(usageStats.lastTimeStamp);
-      //     if (usageStats.lastTimeUsed! != '0') {
-      //       String dateString = usageStats.lastTimeUsed!;
-      //       if (dateString != null) {
-      //         DateTime usageTime =
-      //             DateTime.fromMillisecondsSinceEpoch(int.parse(dateString))
-      //                 .toLocal();
-
-      //         if (usageTime.weekday == i) {
-      //           // change day comparison to match loop range
-      //           usageStatsForDay.add(usageStats);
-      //           // totalDuration += usageTime.difference(startOfDay);
-      //           totalDuration += usageTime.difference(
-      //               DateTime(usageTime.year, usageTime.month, usageTime.day));
-      //         }
-      //       }
-      //     }
-      //   }
-
-      //   String dayOfWeek = _getDayOfWeek(i);
-      //   print("$dayOfWeek: ${totalDuration.inMinutes} minutes");
-      // }
-      // for (int i = 1; i <= 7; i++) {
-      //   // change loop range to include all days
-      //   List<UsageInfo> usageStatsListForDay =
-      //       usageStatsList.where((usageStats) {
-      //     if (usageStats.lastTimeUsed == null ||
-      //         usageStats.lastTimeUsed == '0') {
-      //       return false;
-      //     }
-      //     DateTime usageTime = DateTime.fromMillisecondsSinceEpoch(
-      //             int.parse(usageStats.lastTimeUsed!))
-      //         .toLocal();
-      //     return usageTime.weekday == i;
-      //   }).toList();
-      //   List<UsageInfo> usageStatsForDay = [];
-      //   Duration totalDuration = Duration.zero;
-
-      //   for (UsageInfo usageStats in usageStatsListForDay) {
-      //     String dateString = usageStats.lastTimeUsed!;
-      //     DateTime usageTime =
-      //         DateTime.fromMillisecondsSinceEpoch(int.parse(dateString))
-      //             .toLocal();
-      //     usageStatsForDay.add(usageStats);
-      //     totalDuration += usageTime.difference(
-      //         DateTime(usageTime.year, usageTime.month, usageTime.day));
-      //   }
-
-      //   String dayOfWeek = _getDayOfWeek(i);
-      //   print("$dayOfWeek: ${totalDuration.inMinutes} minutes");
-      // }

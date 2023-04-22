@@ -35,7 +35,6 @@ class _SmartCareScreenState extends State<SmartCareScreen> {
         _socialMediaUsage = value;
       });
     });
-    api.getDailyTip();
   }
 
   DailyTipApi api = DailyTipApi();
@@ -150,6 +149,7 @@ class _SmartCareScreenState extends State<SmartCareScreen> {
                     borderRadius: BorderRadius.all(Radius.circular(20.0)),
                     color: myContainerLightpurple,
                   ),
+                  // TODO: Use shared preference to store daily tip
                   child: Padding(
                     padding: const EdgeInsets.all(20.0),
                     child: FutureBuilder(
