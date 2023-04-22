@@ -1,9 +1,12 @@
+import 'package:app_usage/app_usage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:smartcare/common/theme.dart';
 import 'package:smartcare/constants/constants.dart';
 import 'package:smartcare/constants/text_style.dart';
+import 'package:smartcare/models/daily_tips.dart';
 import 'package:smartcare/screens/charts.dart';
+import 'package:smartcare/services/api.dart';
 
 class SmartCareScreen extends StatefulWidget {
   const SmartCareScreen({super.key});
@@ -15,13 +18,57 @@ class SmartCareScreen extends StatefulWidget {
 class _SmartCareScreenState extends State<SmartCareScreen> {
   final platform =
       const MethodChannel('com.kevinhectorngetich.smartcare/usage_stats');
+  late Future<DailyTips> _tip;
 
   @override
   void initState() {
     super.initState();
     // getWhatsAppUsageStats();
+    _tip = DailyTipApi().getDailyTip();
+    getUnlockCount().then((value) {
+      setState(() {
+        _unclockCounter = value;
+      });
+    });
+    getUsageStats().then((value) {
+      setState(() {
+        _socialMediaUsage = value;
+      });
+    });
+    api.getDailyTip();
   }
 
+  DailyTipApi api = DailyTipApi();
+  DailyTips tips = DailyTips();
+
+  int? _unclockCounter;
+  int? _socialMediaUsage;
+
+  Future<int> getUnlockCount() async {
+    final unlockCount = await platform.invokeMethod('getUnlockCount');
+    return unlockCount;
+  }
+
+  Future<int> getUsageStats() async {
+    try {
+      DateTime now = DateTime.now();
+      DateTime start = DateTime(now.year, now.month, now.day);
+      DateTime end = DateTime.now();
+
+      List<AppUsageInfo> infoList = await AppUsage().getAppUsage(start, end);
+
+      // print(infoList);
+      var totalUsage = 0;
+      for (var info in infoList) {
+        totalUsage += info.usage.inHours;
+      }
+
+      return totalUsage;
+    } on AppUsageException {
+      // print(exception);
+      return 0;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -105,22 +152,67 @@ class _SmartCareScreenState extends State<SmartCareScreen> {
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(20.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
-                        Text(
-                          'Time saving tips:',
-                          style: kTimeSavingTipsTextStyle,
-                        ),
-                        SizedBox(
-                          height: 10.0,
-                        ),
-                        Text(
-                          '” Transform your screen time habits with Smart Care, the innovative app that monitors usage and reminds you to take breaks.”',
-                          style: ktimeSavingTipsBody,
-                        ),
-                      ],
-                    ),
+                    child: FutureBuilder(
+                        future: _tip,
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  'Daily tips:',
+                                  style: kTimeSavingTipsTextStyle,
+                                ),
+                                const SizedBox(
+                                  height: 10.0,
+                                ),
+                                Text(
+                                  '" ' '${snapshot.data!.q}' ' "',
+                                  style: ktimeSavingTipsBody,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Text(
+                                      '~ ' '${snapshot.data!.a}',
+                                      style: ktimeSavingTipsBody,
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            );
+                          } else if (snapshot.hasError) {
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  'Daily tips:',
+                                  style: kTimeSavingTipsTextStyle,
+                                ),
+                                const SizedBox(
+                                  height: 10.0,
+                                ),
+                                const Text(
+                                  ' Life is 10% what happens to us and 90% how we react to it. ',
+                                  style: ktimeSavingTipsBody,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: const [
+                                    Text(
+                                      '~ ' 'KevinHector',
+                                      style: ktimeSavingTipsBody,
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            );
+                          } else {
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }
+                        }),
                   ),
                 ),
                 SizedBox(
@@ -141,15 +233,15 @@ class _SmartCareScreenState extends State<SmartCareScreen> {
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Column(
-                          children: const [
+                          children: [
                             Text(
-                              '0',
+                              _unclockCounter.toString(),
                               style: khomeCardDigit,
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 10.0,
                             ),
-                            Text(
+                            const Text(
                               '''Number of times phone was opened''',
                               style: kcardTextStyle,
                             ),
@@ -172,15 +264,15 @@ class _SmartCareScreenState extends State<SmartCareScreen> {
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Column(
-                          children: const [
+                          children: [
                             Text(
-                              '0',
+                              _socialMediaUsage.toString(),
                               style: khomeCardDigit,
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 10.0,
                             ),
-                            Text(
+                            const Text(
                               'Number of hours spent on social media',
                               style: kcardTextStyle,
                             ),

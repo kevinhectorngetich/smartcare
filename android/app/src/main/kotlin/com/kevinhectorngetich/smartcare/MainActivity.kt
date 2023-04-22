@@ -1,6 +1,7 @@
 package com.kevinhectorngetich.smartcare
 
 import android.app.usage.UsageStatsManager
+import android.app.usage.UsageEvents
 import android.content.Context
 import android.os.Build
 import android.util.Log
@@ -31,10 +32,10 @@ class MainActivity : FlutterActivity() {
                 val usageStatsMap = getUsageStatsForWeek()
                 result.success(usageStatsMap)
             }
-            //   else if (call.method == "getWhatsAppUsage") {
-            //      val usage = getWhatsAppUsage()
-            //     result.success(usage)
-            //  }
+              else if (call.method == "getUnlockCount") {
+                 val count = getUnlockCount()
+                result.success(count)
+             }
             else {
                 result.notImplemented()
             }
@@ -102,54 +103,27 @@ private fun requestUsageStatsPermission() {
         Log.d(TAG, "Usage stats for the week: $usageStatsMap")
         return usageStatsMap
     }
+
+private fun getUnlockCount(): Int {
+    var count = 0
+    val usageStatsManager = getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
+    val calendar = Calendar.getInstance()
+    calendar.set(Calendar.HOUR_OF_DAY, 0)
+    calendar.set(Calendar.MINUTE, 0)
+    calendar.set(Calendar.SECOND, 0)
+    val startTime = calendar.timeInMillis
+    val endTime = System.currentTimeMillis()
+    val usageEvents = usageStatsManager.queryEvents(startTime, endTime)
+    val event = UsageEvents.Event()
+    while (usageEvents.hasNextEvent()) {
+        usageEvents.getNextEvent(event)
+        if (event.eventType == UsageEvents.Event.KEYGUARD_HIDDEN) {
+            count++
+        }
+    }
+    Log.d(TAG, "Unlock count for today: $count")
+    return count
 }
 
-//? Replace code below to see hours and minutes usage
-//     private fun getUsageStatsForWeek(): Map<String, String> {
-//     val usageStatsManager = getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
-//     val calendar = Calendar.getInstance()
-//     calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY)
-//     calendar.set(Calendar.HOUR_OF_DAY, 0)
-//     calendar.set(Calendar.MINUTE, 0)
-//     calendar.set(Calendar.SECOND, 0)
-//     val usageStatsMap = mutableMapOf<String, String>()
-//     val dateFormat = SimpleDateFormat("EEE, MMM d, yyyy")
-//     for (i in 0..6) {
-//         val startDate = calendar.timeInMillis
-//         calendar.add(Calendar.DATE, 1)
-//         val endDate = calendar.timeInMillis
-//         val usageStats = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-//             usageStatsManager.queryUsageStats(
-//                 UsageStatsManager.INTERVAL_BEST,
-//                 startDate,
-//                 endDate
-//             )
-//         } else {
-//             usageStatsManager.queryUsageStats(
-//                 UsageStatsManager.INTERVAL_DAILY,
-//                 startDate,
-//                 endDate
-//             )
-//         }
-//         var usageTime = 0L
-//         for (stat in usageStats) {
-//             if (stat.lastTimeUsed >= startDate && stat.lastTimeUsed <= endDate) {
-//                 usageTime += stat.totalTimeInForeground
-//             }
-//         }
-//         val hours = usageTime / (1000 * 60 * 60)
-//         val minutes = (usageTime % (1000 * 60 * 60)) / (1000 * 60)
-//         val dayOfWeek = when (i) {
-//             0 -> "Sunday"
-//             1 -> "Monday"
-//             2 -> "Tuesday"
-//             3 -> "Wednesday"
-//             4 -> "Thursday"
-//             5 -> "Friday"
-//             else -> "Saturday"
-//         }
-//         usageStatsMap[dayOfWeek] = "$hours hours $minutes minutes"
-//     }
-//     Log.d(TAG, "Usage stats for the week: $usageStatsMap")
-//     return usageStatsMap
-// }
+
+}
