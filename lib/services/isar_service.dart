@@ -16,9 +16,7 @@ class IsarService {
   Future<void> deleteLesson(Lesson newLesson) async {
     final isar = await db;
 
-    final success =
-        await isar.writeTxn<bool>(() => isar.lessons.delete(newLesson.id));
-    print('Recipe deleted: $success');
+    await isar.writeTxn<bool>(() => isar.lessons.delete(newLesson.id));
   }
   // Future<void> deleteLesson(Lesson newLesson) async {
   //   final isar = await db;

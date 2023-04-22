@@ -1,4 +1,3 @@
-import 'package:app_usage/app_usage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:smartcare/common/theme.dart';
@@ -23,11 +22,6 @@ class _SmartCareScreenState extends State<SmartCareScreen> {
     // getWhatsAppUsageStats();
   }
 
-  void getWhatsAppUsageStats() async {
-    var time1 = await platform.invokeMethod<int>("getWhatsAppUsage");
-    var time = Duration(milliseconds: time1 ?? 0);
-    print(time);
-  }
 
   @override
   Widget build(BuildContext context) {

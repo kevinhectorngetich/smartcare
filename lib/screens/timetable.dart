@@ -1,5 +1,4 @@
 import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:smartcare/constants/constants.dart';
@@ -10,7 +9,6 @@ import '../constants/text_style.dart';
 import '../services/isar_service.dart';
 import '../widgets/button_widget.dart';
 
-//TODO: START FROM TOP AND REFACTOR THE LIST TO MATCH:
 class TimeTable extends StatefulWidget {
   // final IsarService service;
 
@@ -79,10 +77,6 @@ class _TimeTableState extends State<TimeTable> {
 
   @override
   Widget build(BuildContext context) {
-    print('UUUUUUUUIIIIIIIIIIIII');
-    print(selectedDateIndex);
-    print(selectedDayOfWeek);
-
 // Function to convert weekday index to name
 
     double paddingHeight = MediaQuery.of(context).size.height * 0.05;
@@ -186,7 +180,8 @@ class _TimeTableState extends State<TimeTable> {
                                   // ),
                                   lesson.startTime,
                                   selectedDayOfWeek!,
-                                  lessonController.text,
+                                  lesson.title,
+                                  //? changed from lessonController to lesson.title
                                   lesson.id,
                                 );
 
@@ -323,7 +318,7 @@ class _TimeTableState extends State<TimeTable> {
   ) {
     TimeOfDay? startTime;
     TimeOfDay? stopTime;
-    final _formKey = GlobalKey<FormState>();
+    final formKey = GlobalKey<FormState>();
 
     showModalBottomSheet(
         context: context,
@@ -344,7 +339,7 @@ class _TimeTableState extends State<TimeTable> {
                       padding: const EdgeInsets.only(
                           left: 20.0, right: 20.0, top: 20.0, bottom: 40.0),
                       child: Form(
-                        key: _formKey,
+                        key: formKey,
                         child: Column(
                           children: [
                             TextFormField(
@@ -491,7 +486,7 @@ class _TimeTableState extends State<TimeTable> {
                             ButtonWidget(
                               text: 'ADD',
                               onClicked: () {
-                                if (_formKey.currentState!.validate()) {
+                                if (formKey.currentState!.validate()) {
                                   service.saveCourse(Lesson()
                                     ..title = lessonController.text
                                     ..startTime = DateTime(
@@ -579,13 +574,6 @@ List<String> isarDaysOftheWeek = [
   'Sunday',
 ];
 
-Map<String, String> _classes = {
-  'Organization Management': '8.00 AM - 10.00 AM',
-  'Project Management': '10.00 AM - 1.00 PM',
-};
-var _lessons = _classes.keys.toList();
-var _time = _classes.values.toList();
-
 List<Color> cardColors = [
   const Color(0xff7F86FF),
   const Color(0xffFFB757),
@@ -601,15 +589,15 @@ List<String> imagesPath = [
 
 void scheduleNotification(DateTime startTime, String dayOfWeek,
     String lessonName, int notificationID) async {
-  // Get the day of the week as an integer (Monday = 1, Tuesday = 2, etc.)
+  //? Get the day of the week as an integer (Monday = 1, Tuesday = 2, etc.)
   // int dayOfWeekIndex = DateTime.parse("2023-03-15").weekday;
-  int dayOfWeekIndex = DateTime.now().weekday;
+  // int dayOfWeekIndex = DateTime.now().weekday;
 
-  // Calculate the difference between the input day of the week and the current day of the week
-  int daysToAdd = (dayOfWeekIndex - getDayOfWeekIndex(dayOfWeek) + 7) % 7;
+  //? Calculate the difference between the input day of the week and the current day of the week
+  // int daysToAdd = (dayOfWeekIndex - getDayOfWeekIndex(dayOfWeek) + 7) % 7;
 
-  // Calculate the date for the next occurrence of the lesson
-  DateTime nextLessonDate = startTime.add(Duration(days: daysToAdd));
+  //? Calculate the date for the next occurrence of the lesson
+  // DateTime nextLessonDate = startTime.add(Duration(days: daysToAdd));
 
   // Create a notification that repeats every week on the same day and time
   await AwesomeNotifications().createNotification(

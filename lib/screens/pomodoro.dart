@@ -1,9 +1,7 @@
 import 'dart:async';
 
-import 'package:app_usage/app_usage.dart';
 import 'package:flutter/material.dart';
 import 'package:rive/rive.dart';
-import 'package:smartcare/common/theme.dart';
 import 'package:smartcare/constants/constants.dart';
 import 'package:smartcare/constants/text_style.dart';
 import 'package:smartcare/widgets/button_widget.dart';
@@ -50,11 +48,9 @@ class _PomodoroScreenState extends State<PomodoroScreen> {
         maxMinutes = Duration(seconds: seconds);
         _progressValue += 1 / 1500;
       }
-      print('$_progressValue' 'in set state: below is out');
 
       // print(maxMinutes.inSeconds);
     });
-    print(_progressValue);
   }
 
   // var isRunning = false;
@@ -77,11 +73,11 @@ class _PomodoroScreenState extends State<PomodoroScreen> {
     });
   }
 
-  // @override
-  // void dispose() {
-  //   timer?.cancel();
-  //   super.dispose();
-  // }
+  @override
+  void dispose() {
+    timer?.cancel();
+    super.dispose();
+  }
 
   bool startisPressed = false;
 

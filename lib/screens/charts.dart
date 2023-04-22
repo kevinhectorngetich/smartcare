@@ -7,7 +7,6 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:smartcare/constants/constants.dart';
 import 'package:smartcare/constants/text_style.dart';
 import 'package:smartcare/services/notification.dart';
-import 'package:intl/intl.dart';
 
 class ChartScreen extends StatefulWidget {
   const ChartScreen({super.key});
@@ -19,41 +18,41 @@ class ChartScreen extends StatefulWidget {
 class _ChartScreenState extends State<ChartScreen> {
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
-  SideTitles get _bottomTitles => SideTitles(
-        showTitles: true,
-        getTitlesWidget: (value, meta) {
-          String text = '';
-          switch (value.toInt()) {
-            case 0:
-              text = 'Sun';
-              break;
-            case 1:
-              text = 'Mon';
-              break;
-            case 2:
-              text = 'Tue';
-              break;
-            case 3:
-              text = 'Wed';
-              break;
-            case 4:
-              text = 'Thur';
-              break;
-            case 5:
-              text = 'Fri';
-              break;
-            case 6:
-              text = 'Sat';
-              break;
-          }
+  // SideTitles get _bottomTitles => SideTitles(
+  //       showTitles: true,
+  //       getTitlesWidget: (value, meta) {
+  //         String text = '';
+  //         switch (value.toInt()) {
+  //           case 0:
+  //             text = 'Sun';
+  //             break;
+  //           case 1:
+  //             text = 'Mon';
+  //             break;
+  //           case 2:
+  //             text = 'Tue';
+  //             break;
+  //           case 3:
+  //             text = 'Wed';
+  //             break;
+  //           case 4:
+  //             text = 'Thur';
+  //             break;
+  //           case 5:
+  //             text = 'Fri';
+  //             break;
+  //           case 6:
+  //             text = 'Sat';
+  //             break;
+  //         }
 
-          return Text(
-            text,
-            style: const TextStyle(
-                fontFamily: 'Poppins', color: Colors.white, fontSize: 10.0),
-          );
-        },
-      );
+  //         return Text(
+  //           text,
+  //           style: const TextStyle(
+  //               fontFamily: 'Poppins', color: Colors.white, fontSize: 10.0),
+  //         );
+  //       },
+  //     );
   SideTitles get _sideTitles => SideTitles(
         showTitles: true,
         interval: 6,
@@ -109,31 +108,31 @@ class _ChartScreenState extends State<ChartScreen> {
       });
     });
 
-    print(weekly);
     // printUsageStatsForWeek();
     // getAppUsageStats();
   }
+  //? Commented on 21 April
 
-  Future<List<AppUsageInfo>> getUsageStats() async {
-    try {
-      DateTime now = DateTime.now();
-      DateTime start = DateTime(now.year, now.month, now.day);
-      DateTime end = DateTime.now();
+  // Future<List<AppUsageInfo>> getUsageStats() async {
+  //   try {
+  //     DateTime now = DateTime.now();
+  //     DateTime start = DateTime(now.year, now.month, now.day);
+  //     DateTime end = DateTime.now();
 
-      List<AppUsageInfo> infoList = await AppUsage().getAppUsage(start, end);
+  //     List<AppUsageInfo> infoList = await AppUsage().getAppUsage(start, end);
 
-      // print(infoList);
-      var totalUsage = 0;
-      for (var info in infoList) {
-        totalUsage += info.usage.inHours;
-      }
+  //     // print(infoList);
+  //     var totalUsage = 0;
+  //     for (var info in infoList) {
+  //       totalUsage += info.usage.inHours;
+  //     }
 
-      return infoList;
-    } on AppUsageException catch (exception) {
-      print(exception);
-      return [];
-    }
-  }
+  //     return infoList;
+  //   } on AppUsageException catch (exception) {
+  //     print(exception);
+  //     return [];
+  //   }
+  // }
 
   final platform =
       const MethodChannel('com.kevinhectorngetich.smartcare/usage_stats');
@@ -160,16 +159,15 @@ class _ChartScreenState extends State<ChartScreen> {
   //   platform.invokeMapMethod("getWhatsAppUsage");
   // }
 
-  Future<void> printUsageStatsForWeek() async {
-    final usageStatsMap = await getUsageStatsForWeek();
-    final formatter = DateFormat('EEEE');
-    final now = DateTime.now();
-    for (int i = 0; i < 7; i++) {
-      final day = formatter.format(now.add(Duration(days: i)));
-      final usageTime = usageStatsMap![day] ?? 0;
-      print('$day: $usageTime hrs used');
-    }
-  }
+  // Future<void> printUsageStatsForWeek() async {
+  //   final usageStatsMap = await getUsageStatsForWeek();
+  //   final formatter = DateFormat('EEEE');
+  //   final now = DateTime.now();
+  //   for (int i = 0; i < 7; i++) {
+  //     final day = formatter.format(now.add(Duration(days: i)));
+  //     final usageTime = usageStatsMap![day] ?? 0;
+  //   }
+  // }
 
   Future<Image> getAppIconMethod(String packageName) async {
     ApplicationWithIcon? app =
@@ -330,7 +328,7 @@ class _ChartScreenState extends State<ChartScreen> {
                                 itemBuilder: (context, index) {
                                   AppUsageInfo info = infoList[index];
 
-                                  // FORMATTER FO RETURN TYPE OF ANDROID
+                                  // FORMATTER FOR RETURN TYPE OF ANDROID
                                   String extractString() {
                                     if (info.appName != 'android') {
                                       return info.appName;
@@ -338,11 +336,12 @@ class _ChartScreenState extends State<ChartScreen> {
                                       String input = info.packageName;
                                       int startIndex = input.indexOf('com.') +
                                           4; // Add 4 to skip "com."
-                                      int endIndex =
-                                          input.indexOf('.', startIndex);
+                                      // int endIndex =
+                                      //     input.indexOf('.', startIndex);
                                       //? For now am using input.length since there
                                       //? is a variations of package name: like:
                                       //? 'com.github.android' and 'com.android.chrome'
+                                      //? instead of endIndex
                                       return input.substring(
                                           startIndex, input.length);
                                     }

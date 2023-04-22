@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smartcare/constants/constants.dart';
 import 'package:smartcare/constants/text_style.dart';
-import 'package:smartcare/screens/charts.dart';
 import 'package:smartcare/screens/pomodoro.dart';
 import 'package:smartcare/screens/smartcare.dart';
 import 'package:smartcare/screens/timetable.dart';

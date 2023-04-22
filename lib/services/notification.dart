@@ -1,20 +1,16 @@
 import 'package:app_usage/app_usage.dart';
 import 'package:awesome_notifications/awesome_notifications.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:intl/intl.dart';
 
-FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-    FlutterLocalNotificationsPlugin();
+// FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+//     FlutterLocalNotificationsPlugin();
 
-Future<void> initializeNotifications() async {
-  const AndroidInitializationSettings initializationSettingsAndroid =
-      AndroidInitializationSettings('@mipmap/ic_launcher');
-  const InitializationSettings initializationSettings =
-      InitializationSettings(android: initializationSettingsAndroid);
-  await flutterLocalNotificationsPlugin.initialize(initializationSettings);
-}
-
-// TODO: Show notifications only twice for an app:
+// Future<void> initializeNotifications() async {
+//   const AndroidInitializationSettings initializationSettingsAndroid =
+//       AndroidInitializationSettings('@mipmap/ic_launcher');
+//   const InitializationSettings initializationSettings =
+//       InitializationSettings(android: initializationSettingsAndroid);
+//   await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+// }
 
 // void showNotification(String appLabel) async {
 //   const AndroidNotificationDetails androidPlatformChannelSpecifics =
@@ -35,6 +31,7 @@ Future<void> initializeNotifications() async {
 //     payload: 'usage_notification',
 //   );
 // }
+int notificationCount = 0;
 void showNotification(String appLabel) async {
   var now = DateTime.now();
   // var formatter = DateFormat('HH:mm:ss');
@@ -61,11 +58,11 @@ void showNotification(String appLabel) async {
 }
 
 void backgroundTask() async {
-  print('Im being executed');
   List<AppUsageInfo> usageStats = await getUsageStats();
   for (var info in usageStats) {
-    if (info.usage.inHours >= 4) {
+    if (info.usage.inHours >= 4 && notificationCount < 2) {
       showNotification(info.appName);
+      notificationCount++;
     }
   }
 }
@@ -79,14 +76,14 @@ Future<List<AppUsageInfo>> getUsageStats() async {
     List<AppUsageInfo> infoList = await AppUsage().getAppUsage(start, end);
 
     // print(infoList);
-    var totalUsage = 0;
-    for (var info in infoList) {
-      totalUsage += info.usage.inHours;
-    }
+    // var totalUsage = 0;
+    // for (var info in infoList) {
+    //   totalUsage += info.usage.inHours;
+    // }
 
     return infoList;
-  } on AppUsageException catch (exception) {
-    print(exception);
+  } on AppUsageException {
+    // print(exception);
     return [];
   }
 }
