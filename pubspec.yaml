@@ -45,6 +45,7 @@ dependencies:
   isar_flutter_libs: ^3.0.5
   awesome_notifications: ^0.6.19
   http: ^0.13.5
+  carousel_slider: ^4.2.1
 
 dev_dependencies:
   flutter_test:

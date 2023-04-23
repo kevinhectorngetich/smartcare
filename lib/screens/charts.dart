@@ -14,7 +14,7 @@ class ChartScreen extends StatefulWidget {
   @override
   State<ChartScreen> createState() => _ChartScreenState();
 }
-// TODO: Remove the commented code
+
 // TODO: check on the notification icon
 // TODO: try to understand if you can add analysis to chart
 
@@ -24,7 +24,7 @@ class _ChartScreenState extends State<ChartScreen> {
 
   SideTitles get _sideTitles => SideTitles(
         showTitles: true,
-        interval: 6,
+        interval: 2,
         reservedSize: 32.0,
         getTitlesWidget: (value, meta) => Text(
           value == 0 ? '0' : '${value.toInt()}' ' hr',
@@ -36,11 +36,18 @@ class _ChartScreenState extends State<ChartScreen> {
   Future<List<AppUsageInfo>>? _infos;
   Future<Map<String, int>?>? weekly;
   Map<String, int>? usageData;
+  int? yAxis;
+  int? usageAvgPreviousWeek;
 
   @override
   void initState() {
     super.initState();
     _infos = getUsageStats();
+    getUsageStatsForPreviousWeek().then((value) {
+      setState(() {
+        usageAvgPreviousWeek = value;
+      });
+    });
     backgroundTask();
     // initializeNotifications();
     // weekly = getUsageStatsForWeek();
@@ -50,6 +57,20 @@ class _ChartScreenState extends State<ChartScreen> {
       setState(() {
         usageData = data;
       });
+      var temp = 0;
+
+      for (var element in data!.values) {
+        if (element > temp) {
+          if (element.isOdd) {
+            temp = element + 1;
+          } else {
+            temp = element;
+          }
+        }
+        yAxis = temp;
+        print(temp);
+        print('above element');
+      }
     });
 
     // printUsageStatsForWeek();
@@ -66,6 +87,12 @@ class _ChartScreenState extends State<ChartScreen> {
     return usageStatsMap;
   }
 
+  Future<int> getUsageStatsForPreviousWeek() async {
+    final int averageUsagePreviousWeek =
+        await platform.invokeMethod('getUsageStatsForPreviousWeek');
+    return averageUsagePreviousWeek;
+  }
+
   Future<Image> getAppIconMethod(String packageName) async {
     ApplicationWithIcon? app =
         (await DeviceApps.getApp(packageName, true)) as ApplicationWithIcon?;
@@ -75,6 +102,9 @@ class _ChartScreenState extends State<ChartScreen> {
   @override
   Widget build(BuildContext context) {
     double paddingHeight = MediaQuery.of(context).size.height * 0.05;
+    print(usageData);
+    print('PREVIOUS WEEK');
+    print(usageAvgPreviousWeek);
 
     return Scaffold(
       backgroundColor: mybackgroundPurple,
@@ -112,7 +142,7 @@ class _ChartScreenState extends State<ChartScreen> {
                         borderData: FlBorderData(
                           show: false,
                         ),
-                        maxY: 24,
+                        maxY: yAxis?.toDouble() ?? 0,
                         groupsSpace: 12,
                         gridData: FlGridData(
                           show: false,
@@ -186,7 +216,7 @@ class _ChartScreenState extends State<ChartScreen> {
                                   show: true,
                                   color: Colors.white30,
                                   fromY: 0,
-                                  toY: 24,
+                                  toY: yAxis?.toDouble(),
                                 ),
                               ),
                             ],

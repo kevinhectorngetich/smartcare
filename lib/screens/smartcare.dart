@@ -181,7 +181,12 @@ class _SmartCareScreenState extends State<SmartCareScreen> {
                                 ),
                               ],
                             );
-                          } else if (snapshot.hasError) {
+                          } else if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          } else {
                             return Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -206,10 +211,6 @@ class _SmartCareScreenState extends State<SmartCareScreen> {
                                   ],
                                 ),
                               ],
-                            );
-                          } else {
-                            return const Center(
-                              child: CircularProgressIndicator(),
                             );
                           }
                         }),

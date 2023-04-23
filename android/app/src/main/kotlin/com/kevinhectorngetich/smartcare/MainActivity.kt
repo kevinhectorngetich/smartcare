@@ -36,6 +36,10 @@ class MainActivity : FlutterActivity() {
                  val count = getUnlockCount()
                 result.success(count)
              }
+              else if (call.method == "getUsageStatsForPreviousWeek") {
+                 val averageUsagePreviousWeek = getUnlockCount()
+                result.success(averageUsagePreviousWeek)
+             }
             else {
                 result.notImplemented()
             }
@@ -103,6 +107,45 @@ private fun requestUsageStatsPermission() {
         Log.d(TAG, "Usage stats for the week: $usageStatsMap")
         return usageStatsMap
     }
+
+    private fun getUsageStatsForPreviousWeek(): Double {
+    val usageStatsManager = getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
+    val calendar = Calendar.getInstance()
+    calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY)
+    calendar.set(Calendar.HOUR_OF_DAY, 0)
+    calendar.set(Calendar.MINUTE, 0)
+    calendar.set(Calendar.SECOND, 0)
+    var totalUsageTime = 0L
+    for (i in 0..6) {
+        val startDate = calendar.timeInMillis
+        calendar.add(Calendar.DATE, 1)
+        val endDate = calendar.timeInMillis
+        val usageStats = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            usageStatsManager.queryUsageStats(
+                UsageStatsManager.INTERVAL_BEST,
+                startDate,
+                endDate
+            )
+        } else {
+            usageStatsManager.queryUsageStats(
+                UsageStatsManager.INTERVAL_DAILY,
+                startDate,
+                endDate
+            )
+        }
+        var usageTime = 0L
+        for (stat in usageStats) {
+            if (stat.lastTimeUsed >= startDate && stat.lastTimeUsed <= endDate) {
+                usageTime += stat.totalTimeInForeground
+            }
+        }
+        totalUsageTime += usageTime
+    }
+    val avgUsageTime = totalUsageTime / (1000 * 60 * 60 * 7).toDouble()
+    Log.d(TAG, "Usage stats for the previous week: $avgUsageTime hours")
+    return avgUsageTime
+}
+
 
 private fun getUnlockCount(): Int {
     var count = 0
