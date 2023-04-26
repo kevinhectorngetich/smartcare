@@ -17,6 +17,8 @@ class ChartScreen extends StatefulWidget {
 
 // TODO: check on the notification icon
 // TODO: try to understand if you can add analysis to chart
+// TODO: Simply user message about improvement
+// TODO: Add Carousel
 
 class _ChartScreenState extends State<ChartScreen> {
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -38,6 +40,7 @@ class _ChartScreenState extends State<ChartScreen> {
   Map<String, int>? usageData;
   int? yAxis;
   int? usageAvgPreviousWeek;
+  int? screenTimeUsage;
 
   @override
   void initState() {
@@ -70,6 +73,30 @@ class _ChartScreenState extends State<ChartScreen> {
         yAxis = temp;
         print(temp);
         print('above element');
+
+        int count = 0;
+        int sum = 0;
+
+//? Check the Logic if it is correct:
+//TODO: productivity percentage
+        for (var value in usageData!.values) {
+          if (value != 0) {
+            count++;
+            sum += value;
+          }
+        }
+
+        double thisWeekAverage = sum / count;
+
+        print('Average usage: $thisWeekAverage');
+
+        double percentageIncrement =
+            ((thisWeekAverage - usageAvgPreviousWeek!) /
+                    usageAvgPreviousWeek!) *
+                100.0;
+        screenTimeUsage = percentageIncrement.toInt();
+
+        print('Percentage average: $percentageIncrement');
       }
     });
 
@@ -123,107 +150,227 @@ class _ChartScreenState extends State<ChartScreen> {
                   height: paddingHeight,
                 ),
                 const Text(
-                  'The total amount of time spent using the phone',
+                  'The total amount of time spent using the phone. Swipe the chart to view performance.',
                   style: kpageBodyStyle,
                 ),
                 SizedBox(
                   height: paddingHeight,
                 ),
-                Container(
-                  height: 200,
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                    color: myContainerLightpurple,
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(15.0),
-                    child: BarChart(
-                      BarChartData(
-                        borderData: FlBorderData(
-                          show: false,
-                        ),
-                        maxY: yAxis?.toDouble() ?? 0,
-                        groupsSpace: 12,
-                        gridData: FlGridData(
-                          show: false,
-                          checkToShowHorizontalLine: (value) => value % 3 == 0,
-                          getDrawingHorizontalLine: (value) {
-                            return FlLine(
-                              color: Colors.white,
-                              strokeWidth: 2.8,
-                            );
-                          },
-                        ),
-                        barTouchData: BarTouchData(enabled: true),
-                        titlesData: FlTitlesData(
-                            topTitles: AxisTitles(
-                                sideTitles: SideTitles(showTitles: false)),
-                            rightTitles: AxisTitles(
-                                sideTitles: SideTitles(showTitles: false)),
-                            // bottomTitles:
-                            bottomTitles: AxisTitles(
-                              sideTitles: SideTitles(
-                                showTitles: true,
-                                getTitlesWidget: (value, meta) {
-                                  String text = '';
-                                  switch (value.toInt()) {
-                                    case 0:
-                                      text = 'Sun';
-                                      break;
-                                    case 1:
-                                      text = 'Mon';
-                                      break;
-                                    case 2:
-                                      text = 'Tue';
-                                      break;
-                                    case 3:
-                                      text = 'Wed';
-                                      break;
-                                    case 4:
-                                      text = 'Thur';
-                                      break;
-                                    case 5:
-                                      text = 'Fri';
-                                      break;
-                                    case 6:
-                                      text = 'Sat';
-                                      break;
-                                  }
+                // CarouselSlider(
+                //   items: [
 
-                                  return Text(
-                                    text,
-                                    style: const TextStyle(
-                                        fontFamily: 'Poppins',
-                                        color: Colors.white,
-                                        fontSize: 10.0),
+                //   ],
+                //   options: CarouselOptions(
+                //     height: 200,
+                //     enlargeCenterPage: true,
+                //     enableInfiniteScroll: false,
+                //   ),
+                // ),
+                SizedBox(
+                  height: 200.0,
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          // height: 200,
+                          // width: double.infinity,
+                          width: MediaQuery.of(context).size.width * 0.85,
+
+                          decoration: const BoxDecoration(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(20.0)),
+                            color: myContainerLightpurple,
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: BarChart(
+                              BarChartData(
+                                borderData: FlBorderData(
+                                  show: false,
+                                ),
+                                maxY: yAxis?.toDouble() ?? 0,
+                                groupsSpace: 12,
+                                gridData: FlGridData(
+                                  show: false,
+                                  checkToShowHorizontalLine: (value) =>
+                                      value % 3 == 0,
+                                  getDrawingHorizontalLine: (value) {
+                                    return FlLine(
+                                      color: Colors.white,
+                                      strokeWidth: 2.8,
+                                    );
+                                  },
+                                ),
+                                barTouchData: BarTouchData(enabled: true),
+                                titlesData: FlTitlesData(
+                                    topTitles: AxisTitles(
+                                        sideTitles:
+                                            SideTitles(showTitles: false)),
+                                    rightTitles: AxisTitles(
+                                        sideTitles:
+                                            SideTitles(showTitles: false)),
+                                    // bottomTitles:
+                                    bottomTitles: AxisTitles(
+                                      sideTitles: SideTitles(
+                                        showTitles: true,
+                                        getTitlesWidget: (value, meta) {
+                                          String text = '';
+                                          switch (value.toInt()) {
+                                            case 0:
+                                              text = 'Sun';
+                                              break;
+                                            case 1:
+                                              text = 'Mon';
+                                              break;
+                                            case 2:
+                                              text = 'Tue';
+                                              break;
+                                            case 3:
+                                              text = 'Wed';
+                                              break;
+                                            case 4:
+                                              text = 'Thur';
+                                              break;
+                                            case 5:
+                                              text = 'Fri';
+                                              break;
+                                            case 6:
+                                              text = 'Sat';
+                                              break;
+                                          }
+
+                                          return Text(
+                                            text,
+                                            style: const TextStyle(
+                                                fontFamily: 'Poppins',
+                                                color: Colors.white,
+                                                fontSize: 10.0),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                    leftTitles:
+                                        AxisTitles(sideTitles: _sideTitles)),
+
+                                //? trail 3
+                                barGroups: usageData?.keys.map((day) {
+                                  final index =
+                                      usageData!.keys.toList().indexOf(day);
+                                  return BarChartGroupData(
+                                    x: index,
+                                    barRods: [
+                                      BarChartRodData(
+                                        toY: usageData![day]!.toDouble(),
+                                        color: mybarRodOrange,
+                                        borderRadius: BorderRadius.circular(20),
+                                        backDrawRodData:
+                                            BackgroundBarChartRodData(
+                                          show: true,
+                                          color: Colors.white30,
+                                          fromY: 0,
+                                          toY: yAxis?.toDouble(),
+                                        ),
+                                      ),
+                                    ],
                                   );
-                                },
+                                }).toList(),
                               ),
                             ),
-                            leftTitles: AxisTitles(sideTitles: _sideTitles)),
-
-                        //? trail 3
-                        barGroups: usageData?.keys.map((day) {
-                          final index = usageData!.keys.toList().indexOf(day);
-                          return BarChartGroupData(
-                            x: index,
-                            barRods: [
-                              BarChartRodData(
-                                toY: usageData![day]!.toDouble(),
-                                color: mybarRodOrange,
-                                borderRadius: BorderRadius.circular(20),
-                                backDrawRodData: BackgroundBarChartRodData(
-                                  show: true,
-                                  color: Colors.white30,
-                                  fromY: 0,
-                                  toY: yAxis?.toDouble(),
-                                ),
-                              ),
-                            ],
-                          );
-                        }).toList(),
+                          ),
+                        ),
                       ),
-                    ),
+                      const SizedBox(
+                        width: 10.0,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          height: 200.0,
+                          width: 200.0,
+                          decoration: const BoxDecoration(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(20.0)),
+                            color: myContainerLightpurple,
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                screenTimeUsage == null
+                                    ? const CircularProgressIndicator() // show loading indicator while screenTimeUsage is null
+                                    : Column(
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Icon(
+                                                screenTimeUsage!.isNegative
+                                                    ? Icons.arrow_upward
+                                                    : Icons.arrow_downward,
+                                                color:
+                                                    screenTimeUsage!.isNegative
+                                                        ? Colors.green
+                                                        : Colors.red,
+                                              ),
+                                              const SizedBox(
+                                                  width:
+                                                      8.0), // add some space between the icon and the text
+                                              Text(
+                                                '${screenTimeUsage!.abs().toString()} %',
+                                                style: TextStyle(
+                                                  fontFamily: 'Poppins',
+                                                  fontSize: 33.0,
+                                                  color: screenTimeUsage!
+                                                          .isNegative
+                                                      ? Colors.green
+                                                      : Colors.red,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(
+                                            height: 5.0,
+                                          ),
+                                          const Text(
+                                            'Percentage progress of hours spent on social media based on previous and current week.',
+                                            style:
+                                                kcardScreenTimePercentageTextStyle,
+                                            textAlign: TextAlign.center,
+                                          ),
+                                        ],
+                                      ),
+
+                                // screenTimeUsage == null
+                                //     ? const CircularProgressIndicator()
+                                //     : Text(
+                                //         screenTimeUsage.toString(),
+                                //         style: TextStyle(
+                                //           fontFamily: 'Poppins',
+                                //           fontSize: 33.0,
+                                //           color: screenTimeUsage!.isNegative
+                                //               ? Colors.green
+                                //               : Colors.red,
+                                //           fontWeight: FontWeight.bold,
+                                //         ),
+                                //       ),
+                                // const SizedBox(
+                                //   height: 10.0,
+                                // ),
+                                // const Text(
+                                //   'Number of hours spent on social media',
+                                //   style: kcardTextStyle,
+                                // ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 SizedBox(

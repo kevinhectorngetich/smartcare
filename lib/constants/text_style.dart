@@ -50,7 +50,19 @@ const kcardTextStyle = TextStyle(
   color: Colors.white,
   fontWeight: FontWeight.w400,
 );
+const kcardScreenTimePercentageTextStyle = TextStyle(
+  fontFamily: 'Poppins',
+  fontSize: 11.0,
+  color: Colors.white,
+  fontWeight: FontWeight.w400,
+);
 const khomeCardDigit = TextStyle(
+  fontFamily: 'Poppins',
+  fontSize: 33.0,
+  color: Colors.white,
+  fontWeight: FontWeight.bold,
+);
+const kpercentageIncreDigit = TextStyle(
   fontFamily: 'Poppins',
   fontSize: 33.0,
   color: Colors.white,
